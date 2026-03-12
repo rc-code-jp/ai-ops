@@ -1,0 +1,41 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# エディタ・IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 秘密情報・認証
+.env
+.env.*
+*.pem
+*.key
+auth.json
+credentials.json
+
+# AIエージェントのローカル状態
+sessions/
+log/
+history.jsonl
+version.json
+
+# Claude Code
+.claude/
+
+# Node.js（スクリプト利用時）
+node_modules/
+package-lock.json
+
+# Python（スクリプト利用時）
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ログ・一時ファイル
+*.log
+tmp/
