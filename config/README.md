@@ -21,6 +21,7 @@ ln -s AGENTS.md CLAUDE.md
 ln -s .agents .claude
 ```
 
+
 ## Codex
 
 ### グローバル設定
@@ -36,6 +37,16 @@ curl -L -o ~/.codex/config.toml \
 mkdir -p .codex
 curl -L -o .codex/.gitignore \
   https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/config/codex.gitignore
+```
+
+## Claude
+
+### グローバル設定
+
+```bash
+mkdir -p ~/.claude
+curl -L -o ~/.claude/settings.json \
+  https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/config/claude/_settings.json
 ```
 
 ## OpenCode

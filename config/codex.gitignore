@@ -1,8 +1,0 @@
-# .codex/.gitignore
-log
-sessions
-skills/.system/
-auth.json
-config.toml
-history.jsonl
-version.json
