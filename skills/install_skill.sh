@@ -196,70 +196,40 @@ if [[ ${#skill_dirs[@]} -eq 0 ]]; then
   exit 1
 fi
 
-cleanup_terminal() {
-  tput cnorm 2>/dev/null || true
-  stty echo icanon min 1 time 0 2>/dev/null || true
-}
-
 render_menu() {
-  local selected_index="$1"
   local i
 
-  printf "\r"
   for ((i = 0; i < ${#skill_dirs[@]}; i++)); do
-    if [[ "$i" -eq "$selected_index" ]]; then
-      printf "> %s\n" "${skill_names[$i]}"
-      printf "  %s\n" "${skill_descriptions[$i]}"
-    else
-      printf "  %s\n" "${skill_names[$i]}"
-      printf "  %s\n" "${skill_descriptions[$i]}"
-    fi
+    printf "  %d) %s\n" "$((i + 1))" "${skill_names[$i]}" >&2
+    printf "     %s\n" "${skill_descriptions[$i]}" >&2
   done
 }
 
 select_skill() {
+  local choice=""
   local selected_index=0
-  local key=""
 
-  trap cleanup_terminal EXIT
-  stty -echo -icanon min 1 time 0
-  tput civis 2>/dev/null || true
-
-  echo "インストールするスキルを上下キーで選択し、Enter で決定してください。"
-  render_menu "$selected_index"
+  echo "インストールするスキルを番号で選択してください。" >&2
+  render_menu
+  echo "" >&2
 
   while true; do
-    IFS= read -rsn1 key
+    printf "選択 (1-%d)> " "${#skill_dirs[@]}" >&2
+    IFS= read -r choice
 
-    if [[ "$key" == $'\x1b' ]]; then
-      IFS= read -rsn2 key
-      case "$key" in
-        "[A")
-          if (( selected_index > 0 )); then
-            selected_index=$((selected_index - 1))
-          fi
-          printf "\033[%dA" $(( ${#skill_dirs[@]} * 2 ))
-          render_menu "$selected_index"
-          ;;
-        "[B")
-          if (( selected_index < ${#skill_dirs[@]} - 1 )); then
-            selected_index=$((selected_index + 1))
-          fi
-          printf "\033[%dA" $(( ${#skill_dirs[@]} * 2 ))
-          render_menu "$selected_index"
-          ;;
-      esac
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+      echo "無効な選択です。1-${#skill_dirs[@]} の番号を入力してください。" >&2
       continue
     fi
 
-    if [[ -z "$key" || "$key" == $'\n' || "$key" == $'\r' || "$key" == $'\x0a' || "$key" == $'\x0d' ]]; then
+    selected_index=$((choice - 1))
+    if (( selected_index >= 0 && selected_index < ${#skill_dirs[@]} )); then
       break
     fi
+
+    echo "無効な選択です。1-${#skill_dirs[@]} の番号を入力してください。" >&2
   done
 
-  cleanup_terminal
-  trap - EXIT
-  echo ""
   printf "%s\n" "$selected_index"
 }
 

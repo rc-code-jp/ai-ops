@@ -4,7 +4,7 @@
 
 ## install
 
-推奨: リポジトリを clone していない環境でも、次のコマンドで一覧から選んでインストールできます。
+推奨: リポジトリを clone していない環境でも、次のコマンドで一覧から選び、番号入力でインストールできます。
 
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/skills/install_skill.sh)
