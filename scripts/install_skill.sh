@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 
 # skills/ 配下のスキルを一覧表示し、上下キーで選択してインストールする。
+# ローカルのリポジトリ内からも、GitHub 上の生スクリプトからも実行できる。
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-SKILLS_DIR="${REPO_ROOT}/skills"
 DEFAULT_REPO_URL="https://github.com/rc-code-jp/ai-ops"
 REPO_URL="${SKILLS_REPO_URL:-$DEFAULT_REPO_URL}"
 SKILLS_REF="${SKILLS_REF:-main}"
+SKILLS_SOURCE="${SKILLS_SOURCE:-auto}"
 DRY_RUN=false
 SELECTED_INDEX="${SKILL_INDEX:-}"
+SKILLS_DIR="${REPO_ROOT}/skills"
+
+skill_dirs=()
+skill_names=()
+skill_descriptions=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -35,15 +41,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ ! -d "$SKILLS_DIR" ]]; then
-  echo "skills ディレクトリが見つかりません: $SKILLS_DIR" >&2
-  exit 1
-fi
-
-skill_dirs=()
-skill_names=()
-skill_descriptions=()
-
 extract_field() {
   local file="$1"
   local key="$2"
@@ -65,11 +62,32 @@ extract_field() {
   ' "$file"
 }
 
-while IFS= read -r skill_dir; do
-  skill_file="${skill_dir}/SKILL.md"
-  skill_slug="$(basename "$skill_dir")"
-  skill_name="$(extract_field "$skill_file" "name")"
-  skill_description="$(extract_field "$skill_file" "description")"
+repo_slug() {
+  local url="$1"
+
+  url="${url#https://github.com/}"
+  url="${url#http://github.com/}"
+  url="${url#git@github.com:}"
+  url="${url%.git}"
+
+  printf "%s\n" "$url"
+}
+
+raw_base_url() {
+  local slug="$1"
+  local ref="$2"
+  printf "https://raw.githubusercontent.com/%s/%s" "$slug" "$ref"
+}
+
+api_base_url() {
+  local slug="$1"
+  printf "https://api.github.com/repos/%s" "$slug"
+}
+
+append_skill() {
+  local skill_slug="$1"
+  local skill_name="$2"
+  local skill_description="$3"
 
   if [[ -z "$skill_name" ]]; then
     skill_name="$skill_slug"
@@ -82,7 +100,119 @@ while IFS= read -r skill_dir; do
   skill_dirs+=("$skill_slug")
   skill_names+=("$skill_name")
   skill_descriptions+=("$skill_description")
-done < <(find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d | sort)
+}
+
+load_local_skills() {
+  if [[ ! -d "$SKILLS_DIR" ]]; then
+    return 1
+  fi
+
+  while IFS= read -r skill_dir; do
+    local skill_file="${skill_dir}/SKILL.md"
+    local skill_slug
+    local skill_name
+    local skill_description
+
+    skill_slug="$(basename "$skill_dir")"
+    skill_name="$(extract_field "$skill_file" "name")"
+    skill_description="$(extract_field "$skill_file" "description")"
+
+    append_skill "$skill_slug" "$skill_name" "$skill_description"
+  done < <(find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d | sort)
+}
+
+load_remote_skills() {
+  local slug api_url raw_url skill_list
+  slug="$(repo_slug "$REPO_URL")"
+  api_url="$(api_base_url "$slug")/contents/skills?ref=${SKILLS_REF}"
+  raw_url="$(raw_base_url "$slug" "$SKILLS_REF")"
+
+  if ! command -v python3 >/dev/null 2>&1; then
+    echo "リモート実行には python3 が必要です。" >&2
+    exit 1
+  fi
+
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "リモート実行には curl が必要です。" >&2
+    exit 1
+  fi
+
+  skill_list="$(curl -fsSL "$api_url" | python3 -c '
+import json
+import sys
+
+items = json.load(sys.stdin)
+for item in items:
+    if item.get("type") == "dir":
+        print(item["name"])
+')"
+
+  if [[ -z "$skill_list" ]]; then
+    echo "GitHub からスキル一覧を取得できませんでした: $api_url" >&2
+    exit 1
+  fi
+
+  while IFS= read -r skill_slug; do
+    local skill_content skill_name skill_description
+
+    [[ -z "$skill_slug" ]] && continue
+
+    skill_content="$(curl -fsSL "${raw_url}/skills/${skill_slug}/SKILL.md")"
+    skill_name="$(printf "%s\n" "$skill_content" | awk -F': ' '
+      BEGIN { in_frontmatter = 0 }
+      /^---$/ {
+        if (in_frontmatter == 0) {
+          in_frontmatter = 1
+          next
+        }
+        exit
+      }
+      in_frontmatter == 1 && $1 == "name" {
+        sub(/^[^:]+: /, "", $0)
+        print $0
+        exit
+      }
+    ')"
+    skill_description="$(printf "%s\n" "$skill_content" | awk -F': ' '
+      BEGIN { in_frontmatter = 0 }
+      /^---$/ {
+        if (in_frontmatter == 0) {
+          in_frontmatter = 1
+          next
+        }
+        exit
+      }
+      in_frontmatter == 1 && $1 == "description" {
+        sub(/^[^:]+: /, "", $0)
+        print $0
+        exit
+      }
+    ')"
+
+    append_skill "$skill_slug" "$skill_name" "$skill_description"
+  done <<< "$skill_list"
+}
+
+case "$SKILLS_SOURCE" in
+  auto)
+    if ! load_local_skills; then
+      load_remote_skills
+    fi
+    ;;
+  local)
+    if ! load_local_skills; then
+      echo "skills ディレクトリが見つかりません: $SKILLS_DIR" >&2
+      exit 1
+    fi
+    ;;
+  remote)
+    load_remote_skills
+    ;;
+  *)
+    echo "SKILLS_SOURCE は auto / local / remote のいずれかを指定してください。" >&2
+    exit 1
+    ;;
+esac
 
 if [[ ${#skill_dirs[@]} -eq 0 ]]; then
   echo "インストール可能なスキルが見つかりませんでした。" >&2
