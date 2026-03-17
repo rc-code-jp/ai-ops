@@ -10,6 +10,8 @@
 bash <(curl -sL https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/skills/install_skill.sh)
 ```
 
+この方法は `raw.githubusercontent.com` 上のスクリプトと一覧ファイルだけを使い、GitHub API には依存しません。
+
 このリポジトリを clone 済みなら、次のようにローカルから実行できます。
 
 ```bash

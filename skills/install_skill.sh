@@ -74,11 +74,6 @@ raw_base_url() {
   printf "https://raw.githubusercontent.com/%s/%s" "$slug" "$ref"
 }
 
-api_base_url() {
-  local slug="$1"
-  printf "https://api.github.com/repos/%s" "$slug"
-}
-
 append_skill() {
   local skill_slug="$1"
   local skill_name="$2"
@@ -117,33 +112,19 @@ load_local_skills() {
 }
 
 load_remote_skills() {
-  local slug api_url raw_url skill_list
+  local slug raw_url skill_list
   slug="$(repo_slug "$REPO_URL")"
-  api_url="$(api_base_url "$slug")/contents/skills?ref=${SKILLS_REF}"
   raw_url="$(raw_base_url "$slug" "$SKILLS_REF")"
-
-  if ! command -v python3 >/dev/null 2>&1; then
-    echo "リモート実行には python3 が必要です。" >&2
-    exit 1
-  fi
 
   if ! command -v curl >/dev/null 2>&1; then
     echo "リモート実行には curl が必要です。" >&2
     exit 1
   fi
 
-  skill_list="$(curl -fsSL "$api_url" | python3 -c '
-import json
-import sys
-
-items = json.load(sys.stdin)
-for item in items:
-    if item.get("type") == "dir":
-        print(item["name"])
-')"
+  skill_list="$(curl -fsSL "${raw_url}/skills/index.txt")"
 
   if [[ -z "$skill_list" ]]; then
-    echo "GitHub からスキル一覧を取得できませんでした: $api_url" >&2
+    echo "GitHub からスキル一覧を取得できませんでした: ${raw_url}/skills/index.txt" >&2
     exit 1
   fi
 
@@ -151,6 +132,7 @@ for item in items:
     local skill_content skill_name skill_description
 
     [[ -z "$skill_slug" ]] && continue
+    [[ "$skill_slug" =~ ^# ]] && continue
 
     skill_content="$(curl -fsSL "${raw_url}/skills/${skill_slug}/SKILL.md")"
     skill_name="$(printf "%s\n" "$skill_content" | awk -F': ' '
