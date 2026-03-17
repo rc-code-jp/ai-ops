@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "不明な引数です: $1" >&2
-      echo "使い方: bash scripts/install_skill.sh [--dry-run] [--index 数値]" >&2
+      echo "使い方: bash skills/install_skill.sh [--dry-run] [--index 数値]" >&2
       exit 1
       ;;
   esac
@@ -298,7 +298,7 @@ if [[ -n "$SELECTED_INDEX" ]]; then
   selected_index="$SELECTED_INDEX"
 else
   if [[ ! -t 0 ]]; then
-    echo "対話モードでは TTY が必要です。非対話で使う場合は `--index` を指定してください。" >&2
+    echo "対話モードでは TTY が必要です。非対話で使う場合は \`--index\` を指定してください。" >&2
     exit 1
   fi
   selected_index="$(select_skill)"
