@@ -1,5 +1,6 @@
 # AI OPS
 
-## 引用
+## ドキュメント
 
-[Anthropicスキル構築ガイド](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
+- [参考にしたドキュメント](docs/refs.md)
+- [役立つ情報](docs/tips.md)
