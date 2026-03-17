@@ -60,19 +60,22 @@ else
   AGENT_NAME="$2"
 fi
 
-# AIタイプに応じたディレクトリを設定
+# AIタイプに応じたディレクトリと拡張子を設定
 if [ "$BASE_PATH" == "$HOME" ]; then
   # Global インストール
   case "$AI_TYPE" in
     claude)
       INSTALL_DIR="${HOME}/.claude/agents"
+      FILE_EXT="md"
       ;;
     codex)
       INSTALL_DIR="${HOME}/.codex/agents"
+      FILE_EXT="toml"
       ;;
     opencode)
       # OpenCodeのグローバルパスは ~/.config/opencode/agents
       INSTALL_DIR="${HOME}/.config/opencode/agents"
+      FILE_EXT="md"
       ;;
   esac
 else
@@ -80,12 +83,15 @@ else
   case "$AI_TYPE" in
     claude)
       INSTALL_DIR="./.claude/agents"
+      FILE_EXT="md"
       ;;
     codex)
       INSTALL_DIR="./.codex/agents"
+      FILE_EXT="toml"
       ;;
     opencode)
       INSTALL_DIR="./.opencode/agents"
+      FILE_EXT="md"
       ;;
   esac
 fi
@@ -94,8 +100,8 @@ fi
 mkdir -p "$INSTALL_DIR"
 
 # ダウンロード
-DOWNLOAD_URL="${BASE_URL}/${AGENT_NAME}.md"
-DEST_FILE="${INSTALL_DIR}/${AGENT_NAME}.md"
+DOWNLOAD_URL="${BASE_URL}/${AGENT_NAME}.${FILE_EXT}"
+DEST_FILE="${INSTALL_DIR}/${AGENT_NAME}.${FILE_EXT}"
 
 echo "インストール中..."
 echo "  AIタイプ: $AI_TYPE"
