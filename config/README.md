@@ -6,7 +6,6 @@
 
 - `codex/config.toml`: Codex のグローバル設定ファイル
 - `codex.gitignore`: Codex のローカル `.codex/.gitignore` 用テンプレート
-- `opencode/_opencode.json`: OpenCode のグローバル設定ファイル
 
 ## AGENTS.md の初期セットアップ
 
@@ -47,14 +46,4 @@ curl -L -o .codex/.gitignore \
 mkdir -p ~/.claude
 curl -L -o ~/.claude/settings.json \
   https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/config/claude/_settings.json
-```
-
-## OpenCode
-
-### グローバル設定
-
-```bash
-mkdir -p ~/.config/opencode
-curl -L -o ~/.config/opencode/opencode.json \
-  https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/config/opencode/_opencode.json
 ```

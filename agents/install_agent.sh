@@ -1,7 +1,7 @@
 #!/bin/bash
 # Sub Agents インストールスクリプト
 # 使い方: bash install.sh <ai-type> <agent-name>
-# ai-type: codex | claude | opencode
+# ai-type: codex | claude
 
 set -e
 
@@ -28,15 +28,13 @@ if [ -z "${1:-}" ]; then
   echo "AIツールを選択してください:"
   echo "  1) claude (Claude Code)"
   echo "  2) codex (OpenAI Codex)"
-  echo "  3) opencode (OpenCode)"
   while true; do
-    printf "選択 (1-3)> "
+    printf "選択 (1-2)> "
     read -r choice
     case "$choice" in
       1) AI_TYPE="claude"; break ;;
       2) AI_TYPE="codex"; break ;;
-      3) AI_TYPE="opencode"; break ;;
-      *) echo "無効な選択です。1-3の番号を入力してください。" ;;
+      *) echo "無効な選択です。1-2の番号を入力してください。" ;;
     esac
   done
 else
@@ -72,11 +70,6 @@ if [ "$BASE_PATH" == "$HOME" ]; then
       INSTALL_DIR="${HOME}/.codex/agents"
       FILE_EXT="toml"
       ;;
-    opencode)
-      # OpenCodeのグローバルパスは ~/.config/opencode/agents
-      INSTALL_DIR="${HOME}/.config/opencode/agents"
-      FILE_EXT="md"
-      ;;
   esac
 else
   # Local インストール
@@ -88,10 +81,6 @@ else
     codex)
       INSTALL_DIR="./.codex/agents"
       FILE_EXT="toml"
-      ;;
-    opencode)
-      INSTALL_DIR="./.opencode/agents"
-      FILE_EXT="md"
       ;;
   esac
 fi
