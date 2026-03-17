@@ -4,32 +4,20 @@
 
 ## install
 
-個別に直接インストールする場合:
-
-```bash
-npx skills add https://github.com/rc-code-jp/ai-ops/tree/main/skills/XXXX
-```
-
-このリポジトリを clone 済みなら、一覧から選んで次のように実行できます。
-
-```bash
-bash skills/install_skill.sh
-```
-
-リポジトリを clone していない環境からは、次のように直接実行できます。
+推奨: リポジトリを clone していない環境でも、次のコマンドで一覧から選んでインストールできます。
 
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/skills/install_skill.sh)
 ```
 
-ドライラン:
+このリポジトリを clone 済みなら、次のようにローカルから実行できます。
 
 ```bash
-bash skills/install_skill.sh --dry-run
+bash skills/install_skill.sh
 ```
 
-リモート実行時のドライラン:
+個別に直接インストールする場合:
 
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/skills/install_skill.sh) --dry-run
+npx skills add https://github.com/rc-code-jp/ai-ops/tree/main/skills/XXXX
 ```

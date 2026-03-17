@@ -11,7 +11,6 @@ DEFAULT_REPO_URL="https://github.com/rc-code-jp/ai-ops"
 REPO_URL="${SKILLS_REPO_URL:-$DEFAULT_REPO_URL}"
 SKILLS_REF="${SKILLS_REF:-main}"
 SKILLS_SOURCE="${SKILLS_SOURCE:-auto}"
-DRY_RUN=false
 SELECTED_INDEX="${SKILL_INDEX:-}"
 SKILLS_DIR="${REPO_ROOT}/skills"
 
@@ -21,10 +20,6 @@ skill_descriptions=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --dry-run)
-      DRY_RUN=true
-      shift
-      ;;
     --index)
       if [[ -z "${2:-}" ]]; then
         echo "--index には数値を指定してください。" >&2
@@ -35,7 +30,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "不明な引数です: $1" >&2
-      echo "使い方: bash skills/install_skill.sh [--dry-run] [--index 数値]" >&2
+      echo "使い方: bash skills/install_skill.sh [--index 数値]" >&2
       exit 1
       ;;
   esac
@@ -310,11 +305,6 @@ skill_url="${REPO_URL}/tree/${SKILLS_REF}/skills/${selected_skill}"
 echo "選択したスキル: ${skill_names[$selected_index]}"
 echo "インストール元: ${skill_url}"
 echo "実行コマンド: npx skills add ${skill_url}"
-
-if [[ "$DRY_RUN" == true ]]; then
-  echo 'ドライランのため、`npx skills add` は実行していません。'
-  exit 0
-fi
 
 echo "`npx skills add` を実行します..."
 exec npx skills add "$skill_url"
