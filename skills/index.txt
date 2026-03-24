@@ -1,5 +1,0 @@
-agents-md-improver
-git-push-branch
-skill-improver
-subagent-improver
-bombard-someone-with-questions
