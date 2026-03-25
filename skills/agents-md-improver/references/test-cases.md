@@ -12,7 +12,7 @@
 
 ### 発火すべきでない依頼（5 件）
 
-1. 「このスキルをレビューして」（SKILL.md が対象 → skill-improver）
+1. 「このスキルをレビューして」（SKILL.md が対象 → codex-skill-improver）
 2. 「サブエージェント定義を見直して」（codex-subagent-improver）
 3. 「README.md を書いて」（一般的なドキュメント作成）
 4. 「コードレビューして」（コードレビュー）
