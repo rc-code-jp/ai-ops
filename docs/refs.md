@@ -19,6 +19,7 @@
 - [Agent Skills](https://developers.openai.com/codex/skills)
 - [Testing Agent Skills Systematically with Evals](https://developers.openai.com/blog/eval-skills)
 - [Use Codex with the Agents SDK](https://developers.openai.com/codex/guides/agents-sdk)
+- [Designing delightful frontends with GPT-5.4](https://developers.openai.com/blog/designing-delightful-frontends-with-gpt-5-4)
 
 ## Claude Code
 - [Extend Claude with skills - Claude Code Docs](https://code.claude.com/docs/en/slash-commands)
