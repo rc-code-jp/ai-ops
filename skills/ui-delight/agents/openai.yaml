@@ -1,7 +1,0 @@
-interface:
-  display_name: "UI Delight"
-  short_description: "視覚品質を重視したUI実装スキル"
-  default_prompt: "Use $ui-delight to design and implement a brand-led or visually polished UI with strong composition for this screen."
-
-policy:
-  allow_implicit_invocation: true

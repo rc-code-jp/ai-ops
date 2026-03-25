@@ -30,14 +30,6 @@ curl -L -o ~/.codex/config.toml \
   https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/config/codex/config.toml
 ```
 
-### ローカル `.gitignore`
-
-```bash
-mkdir -p .codex
-curl -L -o .codex/.gitignore \
-  https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/config/codex.gitignore
-```
-
 ## Claude
 
 ### グローバル設定
