@@ -1,3 +1,9 @@
+# プラグインについて
+
+- [Codex](https://developers.openai.com/codex/plugins)
+- [Claude Code](https://code.claude.com/docs/ja/plugins)
+
+
 # サブエージェント定義の参考ドキュメント（公式のみ）
 
 ## Claude Code
@@ -22,6 +28,5 @@
 - [Designing delightful frontends with GPT-5.4](https://developers.openai.com/blog/designing-delightful-frontends-with-gpt-5-4)
 
 ## Claude Code
-- [Extend Claude with skills - Claude Code Docs](https://code.claude.com/docs/en/slash-commands)
 - [Agent SDK overview - Claude API Docs](https://platform.claude.com/docs/en/agent-sdk/overview)
 - [The-Complete-Guide-to-Building-Skill-for-Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)

@@ -1,0 +1,36 @@
+{
+  "name": "agent-design-toolkit",
+  "version": "0.1.0",
+  "description": "Codex のスキル定義やサブエージェント定義を改善するためのプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/agent-design-toolkit",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skills",
+    "subagents"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Design Toolkit",
+    "shortDescription": "Codex のスキル定義を改善する",
+    "longDescription": "Codex 向けのスキル定義、subagent 定義、routing 文、権限設計を見直すための改善系ツール集です。",
+    "developerName": "rc-code-jp",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "この SKILL.md を Codex 向けに改善して",
+      "この subagent 定義の責務境界を見直して",
+      "Codex 用スキルの description を最適化して"
+    ],
+    "brandColor": "#1D4ED8"
+  }
+}
