@@ -1,0 +1,36 @@
+{
+  "name": "git-ops-helper",
+  "version": "0.1.0",
+  "description": "Git の差分確認、commit、push を安全に進めるためのプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/git-ops-helper",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "commit",
+    "push"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Git Ops Helper",
+    "shortDescription": "安全に commit と push を進める",
+    "longDescription": "差分確認、コミットメッセージ作成、ブランチ push、PR 作成導線の提示を支援する Git 運用プラグインです。",
+    "developerName": "rc-code-jp",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "変更内容を確認してコミットして push して",
+      "今のブランチを安全にリモートへ上げて",
+      "コミット前に差分を確認して要約して"
+    ],
+    "brandColor": "#B45309"
+  }
+}

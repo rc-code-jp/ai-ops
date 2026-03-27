@@ -1,0 +1,36 @@
+{
+  "name": "ui-craft",
+  "version": "0.1.0",
+  "description": "構図や余白、タイポグラフィ、モーションを意図的に設計して強い UI を実装するためのプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/ui-craft",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "ui",
+    "design",
+    "frontend"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "UI Craft",
+    "shortDescription": "完成度の高い UI を実装する",
+    "longDescription": "構図、タイポグラフィ、余白、画像、モーションを意図的に設計し、見た目の強い UI を実装するプラグインです。",
+    "developerName": "rc-code-jp",
+    "category": "Design",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "この LP を強い見た目に作り直して",
+      "既存デザインシステムを守って UI 品質を上げて",
+      "この画面の構図と余白を再設計して"
+    ],
+    "brandColor": "#BE123C"
+  }
+}

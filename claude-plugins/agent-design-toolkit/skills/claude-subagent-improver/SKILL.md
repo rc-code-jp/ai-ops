@@ -1,10 +1,6 @@
 ---
 name: claude-subagent-improver
 description: Claude Code の custom sub-agent 定義をレビューし、公式仕様に沿って description の委譲文、system prompt の自己完結性、サポート済み frontmatter、tools と disallowedTools、permissionMode、skills、mcpServers、hooks、memory、background、effort、isolation を改善する。Claude Code のサブエージェントを公式準拠で見直したいとき、description が委譲文として弱いとき、unsupported な前提や過剰設定を削りたいとき、built-in agent やメイン会話で十分かを再評価したいときに使う。通常の AGENTS.md レビュー、一般的なコードレビュー、単なる Markdown 校正には使わない。
-metadata:
-  author: rc-code-jp
-  version: 1.0.0
-  category: development-tooling
 ---
 
 # Claude Subagent Improver

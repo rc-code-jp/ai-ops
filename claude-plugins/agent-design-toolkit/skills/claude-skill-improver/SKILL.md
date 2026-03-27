@@ -1,10 +1,6 @@
 ---
 name: claude-skill-improver
 description: Claude Code 用のスキル定義をレビューし、description の自動読込境界、slash command としての呼び出し方、フロントマター、サポートファイル構成、サブエージェント連携を改善する。SKILL.md を Claude Code 向けに最適化したいとき、自動トリガーが弱いとき、disable-model-invocation や user-invocable や allowed-tools の使い分けを見直したいとき、Codex 向けスキルを Claude Code に移植したいときに使う。一般的な Markdown 校正、コードレビュー、PR レビューには使わない。
-metadata:
-  author: rc-code-jp
-  version: 1.0.0
-  category: development-tooling
 ---
 
 # Claude Skill Improver

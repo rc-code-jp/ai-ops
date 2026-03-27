@@ -1,0 +1,36 @@
+{
+  "name": "planning-facilitator",
+  "version": "0.1.0",
+  "description": "設計や要件の曖昧さを減らすために重要な未確定事項を深掘りするプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/planning-facilitator",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "design",
+    "requirements"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Planning Facilitator",
+    "shortDescription": "設計の曖昧さを減らすために深掘りする",
+    "longDescription": "重要な未確定事項だけを順に掘り下げ、共有された理解へ到達するための対話支援プラグインです。",
+    "developerName": "rc-code-jp",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "この設計を質問攻めで詰めて",
+      "要件の抜け漏れを一つずつ確認して",
+      "この計画の高影響な未確定事項だけ深掘りして"
+    ],
+    "brandColor": "#0F766E"
+  }
+}
