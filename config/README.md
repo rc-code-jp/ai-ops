@@ -11,13 +11,9 @@
 
 ```bash
 mkdir -p .agents
-touch .agents/.gitkeep
-
+touch .agents/.keep
 curl -L -o AGENTS.md \
   https://raw.githubusercontent.com/rc-code-jp/ai-ops/main/AGENTS.md
-
-ln -s AGENTS.md CLAUDE.md
-ln -s .agents .claude
 ```
 
 
