@@ -2,7 +2,7 @@ profile = "dev"
 
 model = "gpt-5.4"
 model_reasoning_effort = "medium"
-review_model = "gpt-5.3-codex"
+review_model = "gpt-5.4"
 prevent_idle_sleep = true
 
 [tui]
