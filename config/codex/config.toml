@@ -18,15 +18,15 @@ status_line = [
   "weekly-limit",
 ]
 
+[sandbox_workspace_write]
+network_access = false
+
 [profiles.dev]
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 web_search = "cached"
 model_reasoning_effort = "medium"
 model = "gpt-5.4"
-
-[sandbox_workspace_write]
-network_access = false
 
 [profiles.research]
 approval_policy = "on-request"
