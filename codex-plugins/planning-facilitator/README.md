@@ -11,9 +11,3 @@
 - 計画の抜け漏れを一つずつ確認したい
 - 設計の矛盾や依存関係の未解決を洗い出したい
 - 実装前に高影響な意思決定だけを詰めたい
-
-## インストール
-
-```bash
-bash scripts/install-planning-facilitator.sh
-```

@@ -11,9 +11,3 @@
 - 変更内容を確認してから安全に commit / push したい
 - ブランチ運用の基本フローを標準化したい
 - PR 作成前の導線を揃えたい
-
-## インストール
-
-```bash
-bash scripts/install-git-ops-helper.sh
-```
