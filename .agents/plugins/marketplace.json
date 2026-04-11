@@ -1,0 +1,56 @@
+{
+  "name": "ai-ops",
+  "interface": {
+    "displayName": "AI Ops"
+  },
+  "plugins": [
+    {
+      "name": "agent-design-toolkit",
+      "source": {
+        "source": "local",
+        "path": "./codex-plugins/agent-design-toolkit"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "planning-facilitator",
+      "source": {
+        "source": "local",
+        "path": "./codex-plugins/planning-facilitator"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "git-ops-helper",
+      "source": {
+        "source": "local",
+        "path": "./codex-plugins/git-ops-helper"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "ui-craft",
+      "source": {
+        "source": "local",
+        "path": "./codex-plugins/ui-craft"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Design"
+    }
+  ]
+}

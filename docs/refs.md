@@ -11,7 +11,6 @@
 - [Claude Code settings - Claude Code Docs](https://code.claude.com/docs/en/settings)
 - [Prompting best practices - Claude API Docs](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices#give-claude-a-role)
 - [Choosing the right model - Claude API Docs](https://platform.claude.com/docs/en/about-claude/models/choosing-a-model)
-- [https://claude.com/blog/multi-agent-coordination-patterns](https://claude.com/blog/multi-agent-coordination-patterns)
 
 ## Codex
 - [Subagents](https://developers.openai.com/codex/subagents)
