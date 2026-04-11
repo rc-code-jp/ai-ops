@@ -1,0 +1,37 @@
+{
+  "name": "multi-agent-coordination",
+  "version": "0.1.0",
+  "description": "Claude の multi-agent coordination patterns を Codex の複数 agent 運用へ移植するためのプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/multi-agent-coordination",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "agents",
+    "multi-agent",
+    "coordination"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Multi-Agent Coordination",
+    "shortDescription": "複数 agent 運用を設計する",
+    "longDescription": "Claude の multi-agent coordination patterns に合わせて、Codex の subagent、検証ループ、agent teams、message bus、shared state の使い分けを設計するプラグインです。",
+    "developerName": "rc-code-jp",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "multi-agent coordination pattern を Codex 向けに選んで",
+      "この記事の5パターンを Codex の agent 運用に落として",
+      "orchestrator-subagent と agent teams のどちらがよいか判断して"
+    ],
+    "brandColor": "#0F766E"
+  }
+}
