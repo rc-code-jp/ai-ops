@@ -1,8 +1,11 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
 profile = "dev"
 
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
-review_model = "gpt-5.4"
+
+[features]
 prevent_idle_sleep = true
 
 [tui]
@@ -19,14 +22,12 @@ status_line = [
 ]
 
 [sandbox_workspace_write]
-network_access = false
+network_access = true
 
 [profiles.dev]
-approval_policy = "on-request"
+approval_policy = "never"
 sandbox_mode = "workspace-write"
 web_search = "cached"
-model_reasoning_effort = "medium"
-model = "gpt-5.4"
 
 [profiles.research]
 approval_policy = "on-request"
@@ -35,7 +36,7 @@ web_search = "live"
 model_reasoning_effort = "high"
 
 [profiles.readonly]
-approval_policy = "on-request"
+approval_policy = "never"
 sandbox_mode = "read-only"
 web_search = "cached"
 model_reasoning_effort = "medium"
