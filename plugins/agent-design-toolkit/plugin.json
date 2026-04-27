@@ -1,0 +1,18 @@
+{
+  "name": "agent-design-toolkit",
+  "version": "0.1.0",
+  "description": "エージェントの指示、スキル定義、サブエージェント定義を改善するためのプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/plugins/agent-design-toolkit",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "skills",
+    "subagents"
+  ],
+  "skills": "./skills/"
+}
