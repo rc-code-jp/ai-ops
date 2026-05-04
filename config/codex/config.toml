@@ -1,42 +1,10 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-profile = "dev"
-
 model = "gpt-5.5"
 model_reasoning_effort = "medium"
-
-[features]
-prevent_idle_sleep = true
-
-[tui]
-notifications = ["agent-turn-complete", "approval-requested"]
-notification_method = "auto"
-status_line = [
-  "model-with-reasoning",
-  "git-branch",
-  "context-remaining",
-  "context-window-size",
-  "used-tokens",
-  "five-hour-limit",
-  "weekly-limit",
-]
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+web_search = "cached"
 
 [sandbox_workspace_write]
 network_access = true
-
-[profiles.dev]
-approval_policy = "never"
-sandbox_mode = "workspace-write"
-web_search = "cached"
-
-[profiles.research]
-approval_policy = "on-request"
-sandbox_mode = "workspace-write"
-web_search = "live"
-model_reasoning_effort = "high"
-
-[profiles.readonly]
-approval_policy = "never"
-sandbox_mode = "read-only"
-web_search = "cached"
-model_reasoning_effort = "medium"
