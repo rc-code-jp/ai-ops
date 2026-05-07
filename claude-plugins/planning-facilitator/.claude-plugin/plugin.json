@@ -1,0 +1,11 @@
+{
+  "name": "planning-facilitator",
+  "description": "Claude Code 上で計画・設計・実装着手の質を上げるためのスキル群を提供するプラグインです。",
+  "version": "0.1.0",
+  "author": {
+    "name": "rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/claude-plugins/planning-facilitator",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT"
+}
