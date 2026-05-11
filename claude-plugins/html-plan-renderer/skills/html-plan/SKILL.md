@@ -1,6 +1,6 @@
 ---
 name: html-plan
-description: 実行プラン(Plan Mode のプラン、または会話中で合意した実装計画)を HTML ファイルとして ./plans/ 配下へ書き出すスキル。ユーザーが「HTMLでプランを出して」「html-plan で」「HTML プランにして」など明示的に指示したターンに限って発動する。実際の HTML 組み立て・書き出しはサブエージェントに委任することで、生成 HTML 全文をメイン会話の履歴に残さず、反復的なプラン修正(質問→更新→再生成)や大規模リファクタのプランでもメインコンテキストを圧迫しない設計とする。Plan Mode 終了時の自動連動、他スキルからの連鎖発動、ユーザーが指示していないターンでは絶対に発動しない。
+description: 合意済みの実行プランを HTML ファイルとして ./plans/ 配下へ書き出すスキル。「HTMLでプランを出して」「html-plan で」「プランを HTML にして」など、ユーザーが明示的に指示したターンに限って発動する。Plan Mode 終了時の自動連動、他スキルからの連鎖発動、ユーザーが指示していないターンでは発動しない。
 ---
 
 # HTML Plan
@@ -73,7 +73,25 @@ description: 実行プラン(Plan Mode のプラン、または会話中で合�
 - **反復生成時の上書きルール**: 同一日に **同じ slug** のファイルがあれば **上書き** する(プランの修正→再生成のため)。slug が変われば別ファイルとして併存。
 - 明示的に「別ファイルとして残して」と言われた場合のみ `-2`, `-3` を末尾に付与
 
-### 3.4 サブエージェントへの委任
+### 3.4 テンプレートファイルの絶対パス解決
+
+サブエージェントは親 Claude と独立したワーキングディレクトリを持つため、テンプレートは **絶対パス** で渡す必要があります。
+
+テンプレートは、この **SKILL.md と同じディレクトリの `references/template.html`** に置かれています。
+親 Claude はこの SKILL.md をロードした時点で自身の絶対パスを知っているので、それを基準にテンプレートの絶対パスを構築してください。
+
+解決手順(上から優先):
+1. 環境変数 `CLAUDE_PLUGIN_ROOT` が定義されていれば → `${CLAUDE_PLUGIN_ROOT}/skills/html-plan/references/template.html`
+2. SKILL.md 自身の絶対パスから導出 → `<SKILL.md と同じディレクトリ>/references/template.html`
+3. それも不明な場合のみ最後の手段として `find ~/.claude -path '*html-plan/references/template.html' -print -quit` 等で探索
+
+具体例:
+- SKILL.md が `/home/user/.claude/plugins/html-plan-renderer/skills/html-plan/SKILL.md` にあるとき
+- テンプレートは `/home/user/.claude/plugins/html-plan-renderer/skills/html-plan/references/template.html`
+
+この絶対パス(以下 `{TEMPLATE_ABS_PATH}`)を 3.5 でサブエージェントに渡します。
+
+### 3.5 サブエージェントへの委任
 
 `Agent` ツールで `general-purpose` サブエージェントを 1 つ起動します。プロンプトは次のテンプレートに揃えてください。
 
@@ -82,10 +100,9 @@ description: 実行プラン(Plan Mode のプラン、または会話中で合�
 親 Claude のメインコンテキストを汚さないため、HTML の組み立てと書き出しを引き受けます。
 
 ## やること
-1. テンプレートを Read:
-   {PLUGIN_ROOT}/claude-plugins/html-plan-renderer/skills/html-plan/references/template.html
+1. テンプレートを Read(絶対パス): {TEMPLATE_ABS_PATH}
 2. 下記「プラン本文」から各セクションを抽出し、テンプレート内のプレースホルダを置換
-3. 出力先へ Write: {OUTPUT_PATH}
+3. 出力先へ Write(リポジトリルート相対): {OUTPUT_PATH}
 4. 戻り値は「保存パス(と必要なら 1〜2 行のサマリ)だけ」。HTML 本文は絶対に出力に含めないこと
 
 ## プレースホルダ対応
@@ -126,11 +143,11 @@ description: 実行プラン(Plan Mode のプラン、または会話中で合�
 ```
 
 差し込む値:
-- `{PLUGIN_ROOT}` — このプラグインが置かれているリポジトリのルート絶対パス(または相対パス)
+- `{TEMPLATE_ABS_PATH}` — 3.4 で解決したテンプレートの絶対パス
 - `{REPO}` / `{BRANCH}` / `{OUTPUT_PATH}` — 3.2 / 3.3 で求めた値
 - `{PLAN_BODY}` — 3.1 で特定した合意済みプラン本文を **そのまま** 貼る(要約しない)
 
-### 3.5 戻り値の取り扱い
+### 3.6 戻り値の取り扱い
 
 サブエージェントは「保存パス」と短いサマリだけ返してきます。親 Claude はこれをユーザーに伝えるだけにしてください。
 
@@ -152,7 +169,7 @@ description: 実行プラン(Plan Mode のプラン、または会話中で合�
 
 このとき親 Claude は:
 1. まず会話上でプラン本文を更新する(要点ブロックや TodoWrite を最新化)
-2. 「もう一度 HTML にして」と言われたら、最新のプラン本文を持って 3.4 のサブエージェント起動を再実行
+2. 「もう一度 HTML にして」と言われたら、最新のプラン本文を持って 3.5 のサブエージェント起動を再実行
 3. 同日同 slug のファイルは上書きする(3.3 の上書きルール)
 
 サブエージェントは毎回新規に起動して構いません(状態を持たない)。親会話には HTML 全文が残らないため、何度反復しても親コンテキストは膨れません。
@@ -200,7 +217,7 @@ description: 実行プラン(Plan Mode のプラン、または会話中で合�
 > ユーザー: 「いまのプランを HTML で出して」
 >
 > アシスタント:
-> (Agent ツールで general-purpose サブエージェントを起動。プロンプトに 3.4 のテンプレを使い、プラン本文を埋め込む)
+> (Agent ツールで general-purpose サブエージェントを起動。プロンプトに 3.5 のテンプレを使い、プラン本文を埋め込む)
 >
 > サブエージェント: `保存しました: ./plans/plan-2026-05-11-refactor-auth-module.html`
 >
