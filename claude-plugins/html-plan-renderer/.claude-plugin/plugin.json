@@ -1,0 +1,11 @@
+{
+  "name": "html-plan-renderer",
+  "description": "Claude Code の実行プランを読みやすい HTML として ./plans/ に出力するスキルを提供するプラグインです。",
+  "version": "0.1.0",
+  "author": {
+    "name": "rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/claude-plugins/html-plan-renderer",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT"
+}

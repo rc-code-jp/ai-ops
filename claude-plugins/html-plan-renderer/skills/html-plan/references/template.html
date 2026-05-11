@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #57606a;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --warn: #bf3989;
+    --code-bg: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #8b949e;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --warn: #f778ba;
+      --code-bg: #161b22;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--fg); }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  header.plan-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  header.plan-header h1 {
+    font-size: 1.85rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+  }
+  header.plan-header .meta {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+  header.plan-header .meta span::before {
+    content: "・";
+    margin-right: 0.25rem;
+    color: var(--border);
+  }
+  header.plan-header .meta span:first-child::before { content: ""; margin-right: 0; }
+
+  nav.toc {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+  nav.toc h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-muted);
+    margin: 0 0 0.5rem;
+  }
+  nav.toc ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  nav.toc a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  nav.toc a:hover { text-decoration: underline; }
+
+  aside.summary {
+    background: var(--bg-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0 2rem;
+  }
+  aside.summary dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem 1rem;
+  }
+  aside.summary dt {
+    font-weight: 600;
+    color: var(--fg-muted);
+    white-space: nowrap;
+  }
+  aside.summary dd { margin: 0; }
+
+  section { margin-bottom: 2.25rem; }
+  section h2 {
+    font-size: 1.3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem;
+    margin: 0 0 1rem;
+  }
+  section h3 {
+    font-size: 1.05rem;
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  table.files {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+  }
+  table.files th, table.files td {
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.files th {
+    background: var(--bg-soft);
+    font-weight: 600;
+    color: var(--fg-muted);
+  }
+  table.files td.op {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  table.files td.op[data-op="add"] { color: #1a7f37; }
+  table.files td.op[data-op="edit"] { color: var(--accent); }
+  table.files td.op[data-op="delete"] { color: var(--warn); }
+  @media (prefers-color-scheme: dark) {
+    table.files td.op[data-op="add"] { color: #3fb950; }
+  }
+
+  ol.steps { padding-left: 1.25rem; }
+  ol.steps > li { margin-bottom: 1rem; }
+  ol.steps .step-goal { color: var(--fg-muted); font-size: 0.9rem; }
+
+  ul.verification {
+    list-style: none;
+    padding-left: 0;
+  }
+  ul.verification li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  ul.verification li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: var(--fg-muted);
+  }
+
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg);
+    border-radius: 4px;
+  }
+  code { padding: 0.1em 0.35em; font-size: 0.9em; }
+  pre {
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  footer.plan-footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+  }
+
+  @media print {
+    body { max-width: none; padding: 1rem; font-size: 11pt; }
+    nav.toc { display: none; }
+    aside.summary { break-inside: avoid; }
+    section { break-inside: avoid-page; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="plan-header">
+  <h1>{{TITLE}}</h1>
+  <div class="meta">
+    <span>Generated: <time datetime="{{GENERATED_AT_ISO}}">{{GENERATED_AT}}</time></span>
+    <span>Repo: <code>{{REPO}}</code></span>
+    <span>Branch: <code>{{BRANCH}}</code></span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目次">
+  <h2>目次</h2>
+  <ol>
+    {{TOC}}
+  </ol>
+</nav>
+
+<aside class="summary" aria-label="要点">
+  <dl>
+    <dt>何を</dt><dd>{{SUMMARY_WHAT}}</dd>
+    <dt>なぜ</dt><dd>{{SUMMARY_WHY}}</dd>
+    <dt>どう</dt><dd>{{SUMMARY_HOW}}</dd>
+    <dt>副作用</dt><dd>{{SUMMARY_SIDE_EFFECTS}}</dd>
+    <dt>スコープ外</dt><dd>{{SUMMARY_OUT_OF_SCOPE}}</dd>
+  </dl>
+</aside>
+
+<section id="context">
+  <h2>背景 / 目的</h2>
+  {{CONTEXT}}
+</section>
+
+<section id="files">
+  <h2>ファイル変更一覧</h2>
+  <table class="files">
+    <thead>
+      <tr><th>Path</th><th>操作</th><th>概要</th></tr>
+    </thead>
+    <tbody>
+      {{FILES_TABLE}}
+    </tbody>
+  </table>
+</section>
+
+<section id="steps">
+  <h2>実装ステップ</h2>
+  <ol class="steps">
+    {{STEPS}}
+  </ol>
+</section>
+
+<section id="verification">
+  <h2>検証手順</h2>
+  <ul class="verification">
+    {{VERIFICATION}}
+  </ul>
+</section>
+
+<footer class="plan-footer">
+  Generated by <code>html-plan</code> skill (html-plan-renderer v0.1.0) — {{META}}
+</footer>
+
+</body>
+</html>
