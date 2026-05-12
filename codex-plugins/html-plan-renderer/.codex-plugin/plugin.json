@@ -1,0 +1,37 @@
+{
+  "name": "html-plan-renderer",
+  "version": "0.1.0",
+  "description": "Codex で合意済みの実行プランを読みやすい HTML として ./plans/ に書き出すプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/html-plan-renderer",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "plan",
+    "html",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "HTML Plan Renderer",
+    "shortDescription": "プランを HTML で ./plans/ に出力する",
+    "longDescription": "合意済みの実行プランを目次・TL;DR・メタチップ・ファイル変更表・必読ブロック・折りたたみステップ付きの HTML として ./plans/plan-YYYY-MM-DD-{slug}.html に書き出すスキルです。HTML 組み立ては built-in worker サブエージェントに委任し、生成 HTML が親 Codex の会話履歴に残らないようにします。",
+    "developerName": "rc-code-jp",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "いまのプランを HTML で出して",
+      "html-plan でプランを書き出して",
+      "プランを HTML ファイルにして"
+    ],
+    "brandColor": "#0EA5E9"
+  }
+}
