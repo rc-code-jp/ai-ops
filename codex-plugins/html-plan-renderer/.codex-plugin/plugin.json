@@ -19,7 +19,7 @@
   "interface": {
     "displayName": "HTML Plan Renderer",
     "shortDescription": "プランを HTML で ./plans/ に出力する",
-    "longDescription": "合意済みの実行プランを目次・TL;DR・メタチップ・ファイル変更表・必読ブロック・折りたたみステップ付きの HTML として ./plans/plan-YYYY-MM-DD-{slug}.html に書き出すスキルです。HTML 組み立ては同梱の Python スクリプトに委ね、生成 HTML が Codex 会話履歴に残らないようにします。",
+    "longDescription": "合意済みの実行プランを目次・TL;DR・メタチップ・ファイル変更表・必読ブロック・折りたたみステップ付きの HTML として ./plans/plan-YYYY-MM-DD-{slug}.html に書き出すスキルです。HTML 組み立ては built-in worker サブエージェントに委任し、生成 HTML が親 Codex の会話履歴に残らないようにします。",
     "developerName": "rc-code-jp",
     "category": "Developer Tools",
     "capabilities": [
