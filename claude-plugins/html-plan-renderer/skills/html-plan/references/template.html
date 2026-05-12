@@ -11,10 +11,20 @@
     --fg-muted: #57606a;
     --bg: #ffffff;
     --bg-soft: #f6f8fa;
+    --bg-soft-2: #eef2f6;
     --border: #d0d7de;
     --accent: #0969da;
+    --accent-soft: #ddf4ff;
     --warn: #bf3989;
+    --warn-soft: #ffeff7;
+    --danger: #cf222e;
+    --danger-soft: #ffebe9;
+    --success: #1a7f37;
+    --success-soft: #dafbe1;
+    --caution: #9a6700;
+    --caution-soft: #fff8c5;
     --code-bg: #f6f8fa;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -22,70 +32,160 @@
       --fg-muted: #8b949e;
       --bg: #0d1117;
       --bg-soft: #161b22;
+      --bg-soft-2: #1f242c;
       --border: #30363d;
       --accent: #58a6ff;
+      --accent-soft: #0c2d6b;
       --warn: #f778ba;
+      --warn-soft: #471a3a;
+      --danger: #ff7b72;
+      --danger-soft: #3c1618;
+      --success: #3fb950;
+      --success-soft: #0f2e1a;
+      --caution: #d29922;
+      --caution-soft: #3a2e0f;
       --code-bg: #161b22;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   html, body { background: var(--bg); color: var(--fg); }
   body {
     font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 2.5rem 1.25rem 4rem;
+    margin: 0;
     line-height: 1.7;
     font-size: 16px;
   }
+
+  /* Layout: sticky sidebar TOC + main */
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+  main { min-width: 0; max-width: 760px; }
+
+  /* Sticky TOC */
+  nav.toc {
+    position: sticky;
+    top: 1rem;
+    align-self: start;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    font-size: 0.88rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+  }
+  nav.toc h2 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-muted);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  nav.toc ol { margin: 0; padding-left: 1.1rem; }
+  nav.toc li { margin: 0.15rem 0; }
+  nav.toc a { color: var(--fg); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); text-decoration: underline; }
+
+  /* Header */
   header.plan-header {
     border-bottom: 1px solid var(--border);
     padding-bottom: 1.25rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   header.plan-header h1 {
-    font-size: 1.85rem;
+    font-size: 1.95rem;
     margin: 0 0 0.5rem;
     line-height: 1.3;
   }
   header.plan-header .meta {
     color: var(--fg-muted);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.25rem;
+    gap: 0.5rem 1rem;
   }
-  header.plan-header .meta span::before {
-    content: "・";
-    margin-right: 0.25rem;
-    color: var(--border);
-  }
-  header.plan-header .meta span:first-child::before { content: ""; margin-right: 0; }
 
-  nav.toc {
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 2rem;
+  /* TL;DR banner (very prominent) */
+  .tldr {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    margin: 0 0 1.5rem;
+    box-shadow: var(--shadow);
   }
-  nav.toc h2 {
-    font-size: 0.85rem;
+  .tldr h2 {
+    margin: 0 0 0.6rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--fg-muted);
-    margin: 0 0 0.5rem;
-  }
-  nav.toc ol {
-    margin: 0;
-    padding-left: 1.25rem;
-  }
-  nav.toc a {
+    letter-spacing: 0.1em;
     color: var(--accent);
-    text-decoration: none;
+    font-weight: 700;
   }
-  nav.toc a:hover { text-decoration: underline; }
+  .tldr .tldr-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem 1rem;
+    font-size: 0.95rem;
+  }
+  .tldr dt {
+    font-weight: 600;
+    color: var(--fg-muted);
+    white-space: nowrap;
+  }
+  .tldr dd { margin: 0; }
 
+  /* Section meta chips */
+  .section-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.25rem 0 1rem;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    background: var(--bg-soft-2);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .chip[data-level="high"] { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+  .chip[data-level="med"]  { background: var(--caution-soft); color: var(--caution); border-color: var(--caution); }
+  .chip[data-level="low"]  { background: var(--success-soft); color: var(--success); border-color: var(--success); }
+
+  /* Importance badges next to section headings */
+  .badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+  .badge[data-importance="required"] { background: var(--danger-soft); color: var(--danger); }
+  .badge[data-importance="detail"]   { background: var(--accent-soft); color: var(--accent); }
+  .badge[data-importance="ref"]      { background: var(--bg-soft-2); color: var(--fg-muted); }
+
+  /* Summary block (要点) */
   aside.summary {
     background: var(--bg-soft);
     border-left: 4px solid var(--accent);
@@ -106,18 +206,34 @@
   }
   aside.summary dd { margin: 0; }
 
-  section { margin-bottom: 2.25rem; }
+  /* Must-read marker */
+  .must-read {
+    border-left: 4px solid var(--danger);
+    background: var(--danger-soft);
+    padding: 0.75rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+  .must-read::before {
+    content: "👉 ここを必ず読んでください";
+    display: block;
+    font-weight: 700;
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.02em;
+  }
+
+  section { margin-bottom: 2.5rem; scroll-margin-top: 1rem; }
   section h2 {
     font-size: 1.3rem;
     border-bottom: 1px solid var(--border);
     padding-bottom: 0.3rem;
-    margin: 0 0 1rem;
+    margin: 0 0 0.5rem;
   }
-  section h3 {
-    font-size: 1.05rem;
-    margin: 1.25rem 0 0.5rem;
-  }
+  section h3 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
 
+  /* Files table with risk/size columns */
   table.files {
     border-collapse: collapse;
     width: 100%;
@@ -133,27 +249,66 @@
     background: var(--bg-soft);
     font-weight: 600;
     color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
   table.files td.op {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.85rem;
     white-space: nowrap;
   }
-  table.files td.op[data-op="add"] { color: #1a7f37; }
-  table.files td.op[data-op="edit"] { color: var(--accent); }
+  table.files td.op[data-op="add"]    { color: var(--success); }
+  table.files td.op[data-op="edit"]   { color: var(--accent); }
   table.files td.op[data-op="delete"] { color: var(--warn); }
-  @media (prefers-color-scheme: dark) {
-    table.files td.op[data-op="add"] { color: #3fb950; }
+  table.files td.risk, table.files td.size {
+    text-align: center;
+    white-space: nowrap;
+  }
+  table.files td.risk[data-risk="high"] { color: var(--danger); font-weight: 600; }
+  table.files td.risk[data-risk="med"]  { color: var(--caution); font-weight: 600; }
+  table.files td.risk[data-risk="low"]  { color: var(--success); }
+  table.files td.path code {
+    font-size: 0.85em;
   }
 
+  /* Steps with collapsible details */
   ol.steps { padding-left: 1.25rem; }
-  ol.steps > li { margin-bottom: 1rem; }
-  ol.steps .step-goal { color: var(--fg-muted); font-size: 0.9rem; }
-
-  ul.verification {
-    list-style: none;
-    padding-left: 0;
+  ol.steps > li { margin-bottom: 0.85rem; }
+  ol.steps details {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.85rem;
+    margin-top: 0.4rem;
   }
+  ol.steps details[open] { background: var(--bg); }
+  ol.steps summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--fg);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  ol.steps summary::-webkit-details-marker { display: none; }
+  ol.steps summary::before {
+    content: "▶";
+    font-size: 0.7em;
+    color: var(--fg-muted);
+    transition: transform 0.15s;
+  }
+  ol.steps details[open] summary::before { transform: rotate(90deg); }
+  ol.steps .step-goal {
+    color: var(--fg-muted);
+    font-size: 0.88rem;
+    margin: 0.25rem 0;
+  }
+  ol.steps .step-detail { margin-top: 0.5rem; }
+
+  /* Verification checklist */
+  ul.verification { list-style: none; padding-left: 0; }
   ul.verification li {
     margin-bottom: 0.5rem;
     padding-left: 1.5rem;
@@ -166,6 +321,7 @@
     color: var(--fg-muted);
   }
 
+  /* Code */
   code, pre {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     background: var(--code-bg);
@@ -189,16 +345,35 @@
     font-size: 0.85rem;
   }
 
+  /* Print: open details, hide TOC, single column */
   @media print {
-    body { max-width: none; padding: 1rem; font-size: 11pt; }
+    body { font-size: 11pt; }
+    .layout { display: block; max-width: none; padding: 1rem; }
     nav.toc { display: none; }
-    aside.summary { break-inside: avoid; }
+    main { max-width: none; }
+    aside.summary, .tldr, .must-read { break-inside: avoid; }
     section { break-inside: avoid-page; }
     a { color: inherit; text-decoration: none; }
+    details { border: none !important; background: transparent !important; padding: 0 !important; }
+    details > summary { list-style: none; }
+    details > summary::before { content: "" !important; }
+    details > *:not(summary) { display: block !important; }
+    details[open] > summary, details > summary { font-weight: 600; }
   }
 </style>
 </head>
 <body>
+
+<div class="layout">
+
+<nav class="toc" aria-label="目次">
+  <h2>目次</h2>
+  <ol>
+    {{TOC}}
+  </ol>
+</nav>
+
+<main>
 
 <header class="plan-header">
   <h1>{{TITLE}}</h1>
@@ -209,12 +384,20 @@
   </div>
 </header>
 
-<nav class="toc" aria-label="目次">
-  <h2>目次</h2>
-  <ol>
-    {{TOC}}
-  </ol>
-</nav>
+<section class="tldr" aria-label="TL;DR">
+  <h2>TL;DR</h2>
+  <dl class="tldr-grid">
+    <dt>3行で</dt><dd>{{TLDR_3_LINES}}</dd>
+    <dt>最大影響</dt><dd>{{TLDR_MAX_IMPACT}}</dd>
+    <dt>必読箇所</dt><dd>{{TLDR_REVIEW_FOCUS}}</dd>
+  </dl>
+</section>
+
+<div class="section-meta" aria-label="プラン全体のメタ情報">
+  <span class="chip" data-level="{{IMPACT_LEVEL}}">⚠ 影響: {{IMPACT_SCOPE}}</span>
+  <span class="chip">⏱ 推定: {{ESTIMATED_TIME}}</span>
+  <span class="chip" data-level="{{ROLLBACK_LEVEL}}">🔄 ロールバック: {{ROLLBACK_DIFFICULTY}}</span>
+</div>
 
 <aside class="summary" aria-label="要点">
   <dl>
@@ -227,15 +410,21 @@
 </aside>
 
 <section id="context">
-  <h2>背景 / 目的</h2>
+  <h2>背景 / 目的<span class="badge" data-importance="detail">詳細</span></h2>
   {{CONTEXT}}
 </section>
 
 <section id="files">
-  <h2>ファイル変更一覧</h2>
+  <h2>ファイル変更一覧<span class="badge" data-importance="required">必読</span></h2>
   <table class="files">
     <thead>
-      <tr><th>Path</th><th>操作</th><th>概要</th></tr>
+      <tr>
+        <th>Path</th>
+        <th>操作</th>
+        <th>規模</th>
+        <th>リスク</th>
+        <th>概要</th>
+      </tr>
     </thead>
     <tbody>
       {{FILES_TABLE}}
@@ -243,15 +432,20 @@
   </table>
 </section>
 
+<section id="must-read">
+  <h2>レビュー時の重点ポイント<span class="badge" data-importance="required">必読</span></h2>
+  {{MUST_READ}}
+</section>
+
 <section id="steps">
-  <h2>実装ステップ</h2>
+  <h2>実装ステップ<span class="badge" data-importance="detail">詳細</span></h2>
   <ol class="steps">
     {{STEPS}}
   </ol>
 </section>
 
 <section id="verification">
-  <h2>検証手順</h2>
+  <h2>検証手順<span class="badge" data-importance="required">必読</span></h2>
   <ul class="verification">
     {{VERIFICATION}}
   </ul>
@@ -260,6 +454,9 @@
 <footer class="plan-footer">
   Generated by <code>html-plan</code> skill (html-plan-renderer v0.1.0) — {{META}}
 </footer>
+
+</main>
+</div>
 
 </body>
 </html>
