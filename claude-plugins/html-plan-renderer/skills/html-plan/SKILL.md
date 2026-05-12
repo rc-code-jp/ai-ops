@@ -106,30 +106,77 @@ description: 合意済みの実行プランを HTML ファイルとして ./plan
 4. 戻り値は「保存パス(と必要なら 1〜2 行のサマリ)だけ」。HTML 本文は絶対に出力に含めないこと
 
 ## プレースホルダ対応
+### 基本メタ
 - {{TITLE}}                プラン主題を 1 行で
 - {{GENERATED_AT_ISO}}     ISO 8601(例: 2026-05-11T10:30:00+09:00)
 - {{GENERATED_AT}}         人間向け表記(例: 2026-05-11 10:30)
 - {{REPO}}                 {REPO} を埋める(空なら "-")
 - {{BRANCH}}               {BRANCH} を埋める(空なら "-")
-- {{TOC}}                  <li><a href="#anchor">章タイトル</a></li> を必要数
+- {{TOC}}                  <li><a href="#anchor">章タイトル</a></li> を必要数。各 <section> の id と一致させる
+- {{META}}                 フッター用の補足(例: "skill: html-plan / branch: foo")
+
+### TL;DR(冒頭バナー、最も目立つ場所)
+- {{TLDR_3_LINES}}         3 行以内の超要約。「何を・なぜ・どんな成果になるか」を 1 文ずつ
+- {{TLDR_MAX_IMPACT}}      最も影響の大きい変更点を 1 文(壊れたら誰が困るかの観点)
+- {{TLDR_REVIEW_FOCUS}}    レビューで最初に見るべき箇所(例: "ファイル X の関数 Y / マイグレーション順序")
+
+### 全体メタチップ(影響・所要時間・ロールバック)
+- {{IMPACT_LEVEL}}         "high" / "med" / "low" のいずれか(チップの色分け用)
+- {{IMPACT_SCOPE}}         影響範囲を短句で(例: "認証フロー全体", "管理画面のみ")
+- {{ESTIMATED_TIME}}       推定実装時間(例: "2〜3 時間", "半日")
+- {{ROLLBACK_LEVEL}}       "high"(困難)/ "med" / "low"(容易) のいずれか
+- {{ROLLBACK_DIFFICULTY}}  ロールバック容易度の短句(例: "revert で完結", "DB マイグレーション要逆行")
+
+### 要点ブロック
 - {{SUMMARY_WHAT}}         要点: 何を
 - {{SUMMARY_WHY}}          要点: なぜ
 - {{SUMMARY_HOW}}          要点: どう
 - {{SUMMARY_SIDE_EFFECTS}} 要点: 副作用と影響範囲
 - {{SUMMARY_OUT_OF_SCOPE}} 要点: スコープ外
-- {{CONTEXT}}              背景/目的の本文(段落タグで)
-- {{FILES_TABLE}}          <tr><td>path</td><td class="op" data-op="add|edit|delete">操作</td><td>概要</td></tr> を必要数
-- {{STEPS}}                <li><strong>見出し</strong><div class="step-goal">目的/完了条件</div><p>詳細</p></li>
-- {{VERIFICATION}}         <li>検証項目</li>(チェックボックス記号はテンプレ側 CSS が付ける)
-- {{META}}                 "skill: html-plan / branch: ..." 等の補足
+
+### 本文
+- {{CONTEXT}}              背景/目的の本文(<p> タグで段落化)
+- {{FILES_TABLE}}          下記「ファイル変更行の書式」参照
+- {{MUST_READ}}            レビュー時の重点ポイント。<div class="must-read">...</div> のブロックを 1〜3 個。
+                            各ブロックには「該当箇所のパス・関数名」「気をつけて読むべき理由」を含める
+- {{STEPS}}                下記「ステップ行の書式」参照
+- {{VERIFICATION}}         <li>検証項目</li> を必要数(チェック記号 ☐ は CSS が付ける)
+
+## ファイル変更行の書式
+```
+<tr>
+  <td class="path"><code>path/to/file.ts</code></td>
+  <td class="op" data-op="add|edit|delete">add|edit|delete</td>
+  <td class="size" data-size="S|M|L">S|M|L</td>
+  <td class="risk" data-risk="low|med|high">低|中|高</td>
+  <td>1 行サマリ</td>
+</tr>
+```
+- 規模(size): S = 〜30 行 / M = 30〜200 行 / L = 200 行以上
+- リスク(risk): 既存呼び出し元が多い・本番影響あり・ロールバック困難 のいずれかで "high" を、純粋追加や独立モジュールは "low"
+
+## ステップ行の書式(<details> で折りたたみ可能)
+```
+<li>
+  <details>
+    <summary>ステップタイトル(動詞で始める)</summary>
+    <div class="step-goal">目的: 〜 / 完了条件: 〜</div>
+    <div class="step-detail">
+      <p>詳細な手順や注意点</p>
+    </div>
+  </details>
+</li>
+```
+- summary は短く(1 行)、詳細は details の中。これにより冒頭スキャン時はタイトルだけ見える
 
 ## 制約
-- テンプレ内の <style> や <script> 領域は改変しない(プレースホルダ部分のみ置換)
-- HTML エスケープを徹底(<, >, &, ", ' を実体参照に)
-- 外部 CDN や JS は追加しない
+- テンプレ内の <style> 領域は改変しない(プレースホルダ部分のみ置換)
+- HTML エスケープを徹底(<, >, &, ", ' を実体参照に)。`<code>` 内も同様
+- 外部 CDN や <script> は追加しない
 - 抽出時にプラン内容を要約・脚色しない(忠実に転記)
 - 出力ディレクトリが無ければ作成
 - 最終応答は「保存パス: ./plans/xxxx.html」のみ(HTML 全文を返さない)
+- {{MUST_READ}} に該当するレビュー重点ポイントがプランに無い場合は、要点ブロックから推定できる注意点(副作用・スコープ境界・破壊的変更)を 1 つ抽出して書く。全く無ければ「特記なし」とだけ書いた must-read ブロックを 1 つ置く
 
 ## メタ情報
 - REPO: {REPO}
