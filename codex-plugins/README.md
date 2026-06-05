@@ -8,6 +8,8 @@
 - `planning-facilitator`: 設計や要件の深掘り
 - `git-ops-helper`: 差分確認、commit、push の運用支援
 - `ui-craft`: 見た目の強い UI 実装支援
+- `html-plan-renderer`: 実行プランを読みやすい HTML として `./plans/` に出力
+- `html-doc-renderer`: 仕様書・計画資料などのドキュメントを PDF 印刷にも適した HTML として出力
 
 ## 補足
 

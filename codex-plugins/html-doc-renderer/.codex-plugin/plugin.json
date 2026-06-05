@@ -1,0 +1,38 @@
+{
+  "name": "html-doc-renderer",
+  "version": "0.1.0",
+  "description": "Codex で仕様書・設計書・計画資料などのドキュメントを、表紙・目次付きで PDF 印刷にも最適化された読みやすい HTML として出力するプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/html-doc-renderer",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "document",
+    "html",
+    "pdf",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "HTML Doc Renderer",
+    "shortDescription": "ドキュメントを表紙付き HTML / PDF で出力する",
+    "longDescription": "仕様書・設計書・計画資料・プロジェクト説明資料などを、表紙・目次・章単位の改ページを備えた HTML として出力するスキルです。フロー図・タイムライン・簡易ガント・カードなどの視覚表現コンポーネントを純 HTML/CSS で同梱し、PDF 印刷に最適化された print CSS を内蔵します。HTML 組み立ては built-in worker サブエージェントに委任し、生成 HTML が親 Codex の会話履歴に残らないようにします。",
+    "developerName": "rc-code-jp",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "この仕様を HTML ドキュメントにして",
+      "html-doc で設計書を出して",
+      "計画資料を HTML で書き出して"
+    ],
+    "brandColor": "#0969DA"
+  }
+}

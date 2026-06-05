@@ -1,0 +1,11 @@
+{
+  "name": "html-doc-renderer",
+  "description": "仕様書・設計書・計画資料・プロジェクト説明資料などのドキュメントを、表紙・目次付きで PDF 印刷にも最適化された読みやすい HTML として出力するスキルを提供するプラグインです。",
+  "version": "0.1.0",
+  "author": {
+    "name": "rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/claude-plugins/html-doc-renderer",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT"
+}

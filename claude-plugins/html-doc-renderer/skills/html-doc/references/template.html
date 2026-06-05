@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  /* ============================================================
+     Design tokens (flat design / GitHub 風パレット)
+     ============================================================ */
+  :root {
+    color-scheme: light dark;
+    --fg: #0f172a;
+    --fg-muted: #64748b;
+    --bg: #ffffff;
+    --bg-soft: #f8fafc;
+    --bg-soft-2: #f1f5f9;
+    --border: #e2e8f0;
+    --accent: #2563eb;
+    --accent-soft: #eff6ff;
+    --danger: #dc2626;
+    --danger-soft: #fef2f2;
+    --success: #16a34a;
+    --success-soft: #f0fdf4;
+    --caution: #d97706;
+    --caution-soft: #fffbeb;
+    --info: #2563eb;
+    --info-soft: #eff6ff;
+    --code-bg: #f8fafc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e2e8f0;
+      --fg-muted: #94a3b8;
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --bg-soft-2: #283548;
+      --border: #334155;
+      --accent: #60a5fa;
+      --accent-soft: #172554;
+      --danger: #f87171;
+      --danger-soft: #450a0a;
+      --success: #4ade80;
+      --success-soft: #052e16;
+      --caution: #fbbf24;
+      --caution-soft: #451a03;
+      --info: #60a5fa;
+      --info-soft: #172554;
+      --code-bg: #1e293b;
+    }
+  }
+
+  /* ============================================================
+     Base
+     ============================================================ */
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { background: var(--bg); color: var(--fg); }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+    margin: 0;
+    line-height: 1.8;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { color: var(--accent); }
+  p { margin: 0.6rem 0 1rem; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+  }
+
+  /* ============================================================
+     表紙 (cover)
+     ============================================================ */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+  .cover-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .cover-inner::before {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--accent);
+    margin-bottom: 2.5rem;
+  }
+  .cover .doc-type {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 0.25rem 0.95rem;
+    margin: 0 0 1.5rem;
+  }
+  .cover-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .cover-subtitle {
+    font-size: 1.15rem;
+    color: var(--fg-muted);
+    margin: 0 0 3rem;
+  }
+  .cover-meta {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.5rem 2rem;
+    font-size: 0.95rem;
+  }
+  .cover-meta dt { font-weight: 600; color: var(--fg-muted); }
+  .cover-meta dd { margin: 0; }
+
+  /* ============================================================
+     印刷用 目次ページ（画面では非表示）
+     ============================================================ */
+  .toc-page { display: none; }
+  .toc-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.25rem;
+  }
+  .toc-heading::before {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toc-list li {
+    border-bottom: 1px solid var(--border);
+    padding: 0.45rem 0.25rem;
+  }
+  .toc-list a { color: var(--fg); text-decoration: none; }
+
+  /* ============================================================
+     画面レイアウト: sticky サイドバー目次 + 本文
+     ============================================================ */
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+  main { min-width: 0; max-width: 800px; }
+
+  nav.sidebar-toc {
+    position: sticky;
+    top: 1rem;
+    align-self: start;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    font-size: 0.88rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+  }
+  nav.sidebar-toc h2 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-muted);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  nav.sidebar-toc ol { margin: 0; padding: 0; list-style: none; }
+  nav.sidebar-toc li { margin: 0.2rem 0; }
+  nav.sidebar-toc a { color: var(--fg); text-decoration: none; }
+  nav.sidebar-toc a:hover { color: var(--accent); text-decoration: underline; }
+
+  /* ============================================================
+     見出し / 章
+     ============================================================ */
+  section.chapter {
+    margin-bottom: 3rem;
+    scroll-margin-top: 1rem;
+  }
+  h2.chapter-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.1rem;
+  }
+  h2.chapter-heading::before {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  h3 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.5rem; }
+  h4 { font-size: 1rem; font-weight: 600; margin: 1.4rem 0 0.4rem; color: var(--fg-muted); }
+
+  /* ============================================================
+     コールアウト（情報 / 注意 / 危険 / 完了条件）
+     ============================================================ */
+  .callout {
+    border-left: 4px solid var(--callout-color, var(--info));
+    background: var(--callout-bg, var(--info-soft));
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout p { margin: 0.25rem 0; }
+  .callout .callout-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    color: var(--callout-color, var(--info));
+    margin: 0 0 0.3rem;
+  }
+  .callout--info    { --callout-color: var(--info);    --callout-bg: var(--info-soft); }
+  .callout--warning { --callout-color: var(--caution); --callout-bg: var(--caution-soft); }
+  .callout--danger  { --callout-color: var(--danger);  --callout-bg: var(--danger-soft); }
+  .callout--success { --callout-color: var(--success); --callout-bg: var(--success-soft); }
+
+  /* ============================================================
+     テーブル（データ表 / 改訂履歴表）
+     ============================================================ */
+  table.doc-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.92rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  table.doc-table th, table.doc-table td {
+    text-align: left;
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.doc-table th {
+    background: var(--bg-soft);
+    font-weight: 600;
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+  table.doc-table tbody tr:last-child td { border-bottom: none; }
+  table.revision-table th:nth-child(1),
+  table.revision-table td:nth-child(1) { white-space: nowrap; width: 4.5rem; }
+  table.revision-table th:nth-child(2),
+  table.revision-table td:nth-child(2) { white-space: nowrap; width: 7.5rem; }
+  table.revision-table th:nth-child(3),
+  table.revision-table td:nth-child(3) { white-space: nowrap; width: 7rem; }
+
+  /* ============================================================
+     リスト（番号付き手順 / チェックリスト / 用語定義）
+     ============================================================ */
+  ol.procedure-steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 1rem 0;
+    padding: 0;
+  }
+  ol.procedure-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 1.1rem 2.6rem;
+  }
+  ol.procedure-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ol.procedure-steps > li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 0.82rem;
+    top: 2rem;
+    bottom: 0.1rem;
+    width: 2px;
+    background: var(--border);
+  }
+  ol.procedure-steps .step-title {
+    display: block;
+    font-weight: 600;
+  }
+  ol.procedure-steps .step-note {
+    display: block;
+    color: var(--fg-muted);
+    font-size: 0.88rem;
+  }
+
+  ul.checklist { list-style: none; padding: 0; margin: 1rem 0; }
+  ul.checklist li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.6rem;
+    position: relative;
+  }
+  ul.checklist li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: var(--fg-muted);
+  }
+
+  dl.definition-list {
+    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.95rem;
+  }
+  dl.definition-list dt {
+    font-weight: 600;
+    background: var(--bg-soft);
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  dl.definition-list dd {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  dl.definition-list dt:last-of-type,
+  dl.definition-list dd:last-of-type { border-bottom: none; }
+
+  /* ============================================================
+     コードブロック
+     ============================================================ */
+  pre.code-block {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+  }
+  pre.code-block code { background: transparent; padding: 0; }
+
+  /* ============================================================
+     図 + キャプション
+     ============================================================ */
+  figure.doc-figure {
+    margin: 1.25rem 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    background: var(--bg-soft);
+  }
+  figure.doc-figure .figure-content {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    margin: 0;
+    background: transparent;
+  }
+  figure.doc-figure figcaption {
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+  }
+
+  /* ============================================================
+     フロー図（横 / 縦）
+     ============================================================ */
+  ol.flow {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.6rem 1.9rem;
+    padding: 0;
+    margin: 1.25rem 0;
+  }
+  ol.flow > li {
+    position: relative;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    font-size: 0.92rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 6.5rem;
+  }
+  ol.flow > li small {
+    display: block;
+    font-weight: 400;
+    color: var(--fg-muted);
+    font-size: 0.78rem;
+  }
+  ol.flow > li:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -1.55rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--fg-muted);
+    font-weight: 400;
+  }
+  ol.flow > li[data-emphasis="strong"] {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  ol.flow--vertical {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.9rem;
+    max-width: 420px;
+  }
+  ol.flow--vertical > li:not(:last-child)::after {
+    content: "↓";
+    right: auto;
+    top: auto;
+    bottom: -1.65rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* ============================================================
+     タイムライン（マイルストーン）
+     ============================================================ */
+  ul.timeline {
+    list-style: none;
+    margin: 1.25rem 0;
+    padding: 0 0 0 1.4rem;
+    border-left: 2px solid var(--border);
+  }
+  ul.timeline > li {
+    position: relative;
+    padding: 0 0 1.4rem 0.6rem;
+  }
+  ul.timeline > li:last-child { padding-bottom: 0.2rem; }
+  ul.timeline > li::before {
+    content: "";
+    position: absolute;
+    left: -1.95rem;
+    top: 0.45rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--accent);
+  }
+  ul.timeline > li[data-state="done"]::before { background: var(--accent); }
+  ul.timeline .timeline-date {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+  }
+  ul.timeline .timeline-title {
+    display: block;
+    font-weight: 600;
+  }
+  ul.timeline p {
+    margin: 0.2rem 0 0;
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+  }
+
+  /* ============================================================
+     簡易ガントチャート（CSS grid）
+     使い方: .gantt に --cols（期間の列数）、各 .gantt-bar に
+             --start（開始列, 1 始まり）と --span（長さ）を指定
+     ============================================================ */
+  .gantt {
+    margin: 1.25rem 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.85rem;
+  }
+  .gantt-row, .gantt-cols {
+    display: grid;
+    grid-template-columns: minmax(6rem, 9rem) repeat(var(--cols, 6), 1fr);
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .gantt-row:last-child { border-bottom: none; }
+  .gantt-cols {
+    background: var(--bg-soft);
+    font-weight: 600;
+    color: var(--fg-muted);
+  }
+  .gantt-cols span {
+    padding: 0.35rem 0.5rem;
+    text-align: center;
+    border-left: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+  .gantt-cols span:first-child { text-align: left; border-left: none; }
+  .gantt-label {
+    padding: 0.45rem 0.5rem;
+    font-weight: 600;
+    grid-column: 1;
+  }
+  .gantt-bar {
+    grid-column: calc(var(--start, 1) + 1) / span var(--span, 1);
+    grid-row: 1;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    margin: 0.3rem 0.25rem;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .gantt-bar[data-color="green"]  { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+  .gantt-bar[data-color="yellow"] { background: var(--caution-soft); border-color: var(--caution); color: var(--caution); }
+  .gantt-bar[data-color="red"]    { background: var(--danger-soft);  border-color: var(--danger);  color: var(--danger); }
+
+  /* ============================================================
+     数値ハイライト（KPI / 規模感）
+     ============================================================ */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+  .stat {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-soft);
+    padding: 0.8rem 1rem;
+    text-align: center;
+  }
+  .stat .stat-value {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.3;
+  }
+  .stat .stat-label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+  }
+
+  /* ============================================================
+     カードグリッド（機能一覧 / 体制 / 構成要素）
+     ============================================================ */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+    margin: 1.25rem 0;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+  }
+  .card .card-title {
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+    font-size: 0.98rem;
+  }
+  .card p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+  }
+
+  /* ============================================================
+     ステータスチップ
+     ============================================================ */
+  .tag {
+    display: inline-block;
+    padding: 0.08rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: var(--bg-soft-2);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .tag[data-state="done"]   { background: var(--success-soft); color: var(--success); border-color: var(--success); }
+  .tag[data-state="active"] { background: var(--accent-soft);  color: var(--accent);  border-color: var(--accent); }
+  .tag[data-state="risk"]   { background: var(--danger-soft);  color: var(--danger);  border-color: var(--danger); }
+  .tag[data-state="todo"]   { background: var(--bg-soft-2);    color: var(--fg-muted); border-color: var(--border); }
+
+  /* ============================================================
+     改ページ制御ユーティリティ
+     ============================================================ */
+  .page-break { break-after: page; display: block; height: 0; }
+  .keep-together { break-inside: avoid; }
+
+  /* ============================================================
+     フッター
+     ============================================================ */
+  footer.doc-footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+  }
+
+  /* ============================================================
+     Print（PDF 出力 / A4 ページ最適化）
+     ============================================================ */
+  @page {
+    size: A4;
+    margin: 18mm 16mm 20mm;
+    @bottom-right {
+      content: counter(page);
+      font-size: 9pt;
+      color: #64748b;
+      font-family: system-ui, sans-serif;
+    }
+  }
+  @media print {
+    /* 印刷はライトパレット固定（ダークモードでも白背景で出力） */
+    :root {
+      --fg: #0f172a;
+      --fg-muted: #64748b;
+      --bg: #ffffff;
+      --bg-soft: #f8fafc;
+      --bg-soft-2: #f1f5f9;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --success: #16a34a;
+      --success-soft: #f0fdf4;
+      --caution: #d97706;
+      --caution-soft: #fffbeb;
+      --info: #2563eb;
+      --info-soft: #eff6ff;
+      --code-bg: #f8fafc;
+    }
+    body { font-size: 10.5pt; line-height: 1.7; }
+
+    /* 表紙: 1 ページ目に単独で配置 */
+    .cover {
+      min-height: 85vh;
+      break-after: page;
+      padding: 0;
+    }
+
+    /* 印刷用目次: 2 ページ目に単独で配置 */
+    .toc-page {
+      display: block;
+      break-after: page;
+    }
+
+    /* 画面用レイアウトを 1 カラム化、サイドバー目次は非表示 */
+    .layout { display: block; max-width: none; padding: 0; }
+    nav.sidebar-toc { display: none; }
+    main { max-width: none; }
+
+    /* 章単位の改ページ（先頭章は改ページしない。.no-break で任意抑制可） */
+    section.chapter { break-before: page; margin-bottom: 1.5rem; }
+    main > section.chapter:first-of-type,
+    section.chapter.no-break { break-before: auto; }
+
+    /* 部品をページ境界で分断しない */
+    table.doc-table, figure.doc-figure, .callout,
+    pre.code-block, dl.definition-list,
+    ol.flow > li, ul.timeline > li, .gantt,
+    .stat, .card, ol.procedure-steps > li,
+    .keep-together { break-inside: avoid; }
+    h2, h3, h4 { break-after: avoid; }
+
+    /* 孤立行対策 */
+    p, li { orphans: 3; widows: 3; }
+
+    /* コードは印刷時に折り返す */
+    pre.code-block { white-space: pre-wrap; word-break: break-all; }
+
+    /* リンクは本文色に */
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 表紙（1 ページ目） ===== -->
+<div class="cover">
+  <div class="cover-inner">
+    <p class="doc-type">{{DOC_TYPE}}</p>
+    <h1 class="cover-title">{{TITLE}}</h1>
+    <p class="cover-subtitle">{{SUBTITLE}}</p>
+    <dl class="cover-meta">
+      <dt>版数</dt><dd>{{VERSION}}</dd>
+      <dt>作成日</dt><dd>{{DATE}}</dd>
+      <dt>作成者</dt><dd>{{AUTHOR}}</dd>
+    </dl>
+  </div>
+</div>
+
+<!-- ===== 印刷用 目次ページ（2 ページ目・画面では非表示） ===== -->
+<div class="toc-page">
+  <h2 class="toc-heading">目次</h2>
+  <ol class="toc-list">
+    {{TOC}}
+  </ol>
+</div>
+
+<!-- ===== 本文（画面: サイドバー目次 + 本文 / 印刷: 1 カラム） ===== -->
+<div class="layout">
+
+<nav class="sidebar-toc" aria-label="目次">
+  <h2>目次</h2>
+  <ol>
+    {{TOC}}
+  </ol>
+</nav>
+
+<main>
+
+{{BODY}}
+
+<footer class="doc-footer">
+  <span>{{TITLE}} — {{VERSION}}（{{DATE}}）</span>
+  <span>{{META}}</span>
+</footer>
+
+</main>
+</div>
+
+</body>
+</html>

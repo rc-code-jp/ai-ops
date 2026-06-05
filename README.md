@@ -8,6 +8,8 @@ Codex 向けの skill と、それらを配布しやすくする plugin 本体�
 - `planning-facilitator`: 設計や要件の深掘り
 - `git-ops-helper`: Git の commit / push 支援
 - `ui-craft`: 見た目重視の UI 実装支援
+- `html-plan-renderer`: 実行プランを読みやすい HTML として `./plans/` に出力
+- `html-doc-renderer`: 仕様書・計画資料などのドキュメントを PDF 印刷にも適した HTML として出力
 
 Codex 向け plugin 本体は `codex-plugins/` 配下で管理しています。一覧は `codex-plugins/README.md` を参照してください。
 
