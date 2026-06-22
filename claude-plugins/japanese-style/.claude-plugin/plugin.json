@@ -1,0 +1,12 @@
+{
+  "name": "japanese-style",
+  "description": "Claude Code の出力を日本語に固定し、文体・表記ルールをチーム共通で揃えるための output style を提供するプラグインです。",
+  "version": "0.1.0",
+  "author": {
+    "name": "rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/claude-plugins/japanese-style",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "outputStyles": "./output-styles/"
+}

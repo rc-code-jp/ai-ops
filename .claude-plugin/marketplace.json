@@ -1,0 +1,44 @@
+{
+  "name": "ai-ops",
+  "owner": {
+    "name": "rc-code-jp"
+  },
+  "description": "rc-code-jp の Claude Code 向けプラグイン群",
+  "plugins": [
+    {
+      "name": "agent-design-toolkit",
+      "source": "./claude-plugins/agent-design-toolkit",
+      "description": "Claude Code のスキル定義とサブエージェント定義を改善するためのプラグインです。",
+      "version": "0.1.0",
+      "category": "Developer Tools"
+    },
+    {
+      "name": "planning-facilitator",
+      "source": "./claude-plugins/planning-facilitator",
+      "description": "Claude Code 上で計画・設計・実装着手の質を上げるためのスキル群を提供するプラグインです。",
+      "version": "0.1.0",
+      "category": "Productivity"
+    },
+    {
+      "name": "html-plan-renderer",
+      "source": "./claude-plugins/html-plan-renderer",
+      "description": "Claude Code の実行プランを読みやすい HTML として ./plans/ に出力するスキルを提供するプラグインです。",
+      "version": "0.1.0",
+      "category": "Developer Tools"
+    },
+    {
+      "name": "html-doc-renderer",
+      "source": "./claude-plugins/html-doc-renderer",
+      "description": "仕様書・設計書・計画資料・プロジェクト説明資料などのドキュメントを、表紙・目次付きで PDF 印刷にも最適化された読みやすい HTML として出力するスキルを提供するプラグインです。",
+      "version": "0.1.0",
+      "category": "Developer Tools"
+    },
+    {
+      "name": "japanese-style",
+      "source": "./claude-plugins/japanese-style",
+      "description": "Claude Code の出力を日本語に固定し、文体・表記ルールをチーム共通で揃えるための output style を提供するプラグインです。",
+      "version": "0.1.0",
+      "category": "Productivity"
+    }
+  ]
+}
