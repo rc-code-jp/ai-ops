@@ -1,6 +1,10 @@
 ---
 name: git-push-branch
 description: 変更内容を確認してコミットし、現在の Git ブランチを対応するリモートへ push する。push 後、main 以外のブランチでは GitHub の PR 作成リンクを表示する。「変更をコミットして push して」「今のブランチを GitHub に上げて」「コミットを作ってリモートに送って」のように commit や push を依頼されたときに使う。差分の確認だけで commit を伴わないとき、PR レビューそのもの、PR の作成自体には使わない。
+metadata:
+  author: rc-code-jp
+  version: 0.1.0
+  category: version-control
 ---
 
 # Git Push Branch

@@ -1,6 +1,10 @@
 ---
 name: agents-md-improver
 description: CLAUDE.md / AGENTS.md などのエージェント指示ファイルをレビューし、役割分離・指示の具体性・検証可能性・スコープ設計・参照設計・スキル分解可能性などの観点で改善する。CLAUDE.md や AGENTS.md をレビュー・改善・整理したいとき、指示ファイルが長すぎるとき、エージェントの挙動がブレるので指示を見直したいとき、曖昧な指示を具体化したいときに使う。SKILL.md の改善（codex-skill-improver）、custom agent 定義の改善（codex-subagent-improver）、一般的な README やドキュメント作成、コードレビュー、PR レビューには使わない。
+metadata:
+  author: rc-code-jp
+  version: 0.1.0
+  category: development-tooling
 ---
 
 # AGENTS.md Improver

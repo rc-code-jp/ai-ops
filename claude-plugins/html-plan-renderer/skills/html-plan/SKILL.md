@@ -1,6 +1,10 @@
 ---
 name: html-plan
 description: 合意済みの実行プランを HTML ファイルとして ./plans/ 配下へ書き出すスキル。「HTMLでプランを出して」「html-plan で」「プランを HTML にして」など、ユーザーが明示的に指示したターンに限って発動する。Plan Mode 終了時の自動連動、他スキルからの連鎖発動、ユーザーが指示していないターンでは発動しない。
+metadata:
+  author: rc-code-jp
+  version: 0.1.0
+  category: development-tooling
 ---
 
 # HTML Plan

@@ -1,6 +1,10 @@
 ---
 name: html-doc
 description: 仕様書・設計書・計画資料・プロジェクト説明資料などのドキュメントを、表紙・目次付きで PDF 印刷にも適した読みやすい HTML ファイルとして出力するスキル。「HTML でドキュメントを作って」「html-doc で仕様書を出して」「この内容を HTML ドキュメントにして」など、ユーザーが明示的に指示したターンに限って発動する。他スキルからの連鎖発動、調査・実装・プラン立案だけのターン、ユーザーが指示していないターンでは発動しない。
+metadata:
+  author: rc-code-jp
+  version: 0.1.0
+  category: documentation
 ---
 
 # HTML Doc

@@ -1,6 +1,10 @@
 ---
 name: codex-subagent-improver
 description: Codex の custom agent TOML をレビューし、委譲条件、責務境界、developer_instructions、出力仕様、権限、モデル設定を改善する。Codex の subagent 定義を見直したいとき、description が routing 文として弱いとき、役割が広すぎるとき、subagent 化の妥当性を再評価したいときに使う。通常の repo 用 AGENTS.md、一般的なコードレビュー、通常ドキュメントの校正には使わない。
+metadata:
+  author: rc-code-jp
+  version: 0.1.0
+  category: development-tooling
 ---
 
 # Codex Subagent Improver
