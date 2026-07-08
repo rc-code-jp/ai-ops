@@ -12,6 +12,9 @@ Blogger の公開フィード API を検索エンジンとして利用する。
   ダウンロード（URL を列挙し、--dir へ保存。保存パスを1行ずつ出力）
     python3 irasutoya_search.py download URL1 URL2 --dir ./images
 
+  画像の埋め込み（HTML 内の images/ 相対参照を data URI に変換し自己完結化）
+    python3 irasutoya_search.py inline ./output/index.html
+
 注意:
   - サイトへの負荷配慮のため、リクエスト間に既定 1 秒の待機を入れる
   - いらすとやの利用規約（商用は1制作物あたり素材20点まで無料）は
@@ -19,8 +22,10 @@ Blogger の公開フィード API を検索エンジンとして利用する。
 """
 
 import argparse
+import base64
 import http.client
 import json
+import mimetypes
 import os
 import re
 import sys
@@ -133,6 +138,42 @@ def cmd_download(args: argparse.Namespace) -> int:
     return status
 
 
+def cmd_inline(args: argparse.Namespace) -> int:
+    """HTML 内の src="images/xxx" 参照を data URI に置換して自己完結化する。
+
+    プレビューパネルや単体ファイル共有など、隣の images/ ディレクトリが
+    一緒に配信されない環境でも画像が表示されるようにする。
+    """
+    html_path = args.html
+    base_dir = os.path.dirname(os.path.abspath(html_path))
+    with open(html_path, encoding="utf-8") as fp:
+        html = fp.read()
+
+    missing = []
+
+    def replace(match: "re.Match") -> str:
+        rel = match.group(1)
+        img_path = os.path.join(base_dir, rel)
+        if not os.path.isfile(img_path):
+            missing.append(rel)
+            return match.group(0)
+        mime = mimetypes.guess_type(img_path)[0] or "image/png"
+        with open(img_path, "rb") as img:
+            b64 = base64.b64encode(img.read()).decode("ascii")
+        return f'src="data:{mime};base64,{b64}"'
+
+    html, count = re.subn(r'src="(images/[^"]+)"', replace, html)
+    out_path = args.output or html_path
+    with open(out_path, "w", encoding="utf-8") as fp:
+        fp.write(html)
+    print(f"{out_path}: {count - len(missing)} 個の画像を埋め込み")
+    if missing:
+        for rel in sorted(set(missing)):
+            print(f"ERROR: 画像ファイルが見つかりません: {rel}", file=sys.stderr)
+        return 1
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -149,6 +190,11 @@ def main() -> int:
     p_dl.add_argument("--dir", required=True, help="保存先ディレクトリ")
     p_dl.add_argument("--wait", type=float, default=REQUEST_WAIT_SEC, help="リクエスト間隔(秒)")
     p_dl.set_defaults(func=cmd_download)
+
+    p_inline = sub.add_parser("inline", help="HTML 内の images/ 参照を data URI に埋め込み")
+    p_inline.add_argument("html", help="対象の HTML ファイル")
+    p_inline.add_argument("--output", "-o", help="出力先（省略時は上書き）")
+    p_inline.set_defaults(func=cmd_inline)
 
     args = parser.parse_args()
     return args.func(args)
