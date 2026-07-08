@@ -1,0 +1,11 @@
+{
+  "name": "irasutoya-docs",
+  "description": "フリー素材サイト「いらすとや」の画像を検索・取得し、SVG や絵文字の代わりにいらすとやのイラストで統一されたスライド・ドキュメントを HTML として出力するスキルを提供するプラグインです。",
+  "version": "0.1.0",
+  "author": {
+    "name": "rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/claude-plugins/irasutoya-docs",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT"
+}

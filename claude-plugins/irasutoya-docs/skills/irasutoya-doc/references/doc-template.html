@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+  /* ============================================================
+     irasutoya-doc ドキュメントテンプレート
+     - A4 縦の読み物ドキュメント / 章ごとに改ページ
+     - JS なし・外部 CDN なし・画像は images/ 配下のローカル参照
+     ============================================================ */
+  :root {
+    --bg: #f2efe9;
+    --paper: #fffdf8;
+    --ink: #3a3a33;
+    --ink-soft: #6f6a5d;
+    --accent: #2a9d8f;
+    --accent-soft: #e3f2ef;
+    --warn: #e76f51;
+    --warn-soft: #fdeee9;
+    --line: #ddd6c8;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Maru Gothic ProN", "BIZ UDPGothic",
+      "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    line-height: 1.9;
+    font-size: 15px;
+  }
+  .page-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* ---- 表紙 ---- */
+  .cover {
+    background: linear-gradient(180deg, var(--paper) 0%, var(--accent-soft) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 96px 48px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .cover .doc-type {
+    display: inline-block;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 2px 24px;
+    font-weight: bold;
+  }
+  .cover h1 { font-size: 34px; line-height: 1.4; }
+  .cover .subtitle { color: var(--ink-soft); font-size: 18px; }
+  .cover .hero img { height: 180px; width: auto; }
+  .cover .cover-meta { color: var(--ink-soft); }
+
+  /* ---- 目次 ---- */
+  .toc {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 40px 48px;
+  }
+  .toc h2 { font-size: 22px; color: var(--accent); margin-bottom: 16px; }
+  .toc ol { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .toc a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--line); display: block; padding-bottom: 4px; }
+
+  /* ---- 章 ---- */
+  .chapter {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 40px 48px;
+  }
+  /* flex にすると子要素の float（irasuto--float）が効かなくなるため block + margin で間隔を取る */
+  .chapter > * + * { margin-top: 20px; }
+  .chapter-heading {
+    font-size: 24px;
+    border-bottom: 4px solid var(--accent);
+    padding-bottom: 8px;
+  }
+  .chapter h3 {
+    font-size: 18px;
+    color: var(--accent);
+    border-left: 6px solid var(--accent);
+    padding-left: 10px;
+  }
+  .chapter p { text-align: justify; }
+
+  /* ---- いらすとや画像 ---- */
+  .irasuto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin: 8px auto;
+  }
+  .irasuto img { max-height: 200px; max-width: 100%; width: auto; object-fit: contain; }
+  .irasuto--small img { max-height: 120px; }
+  .irasuto figcaption { font-size: 12px; color: var(--ink-soft); }
+  /* 本文右に回り込む小さい挿絵 */
+  .irasuto--float {
+    float: right;
+    margin: 0 0 8px 20px;
+  }
+  .irasuto--float img { max-height: 130px; }
+  .clearfix::after { content: ""; display: block; clear: both; }
+
+  /* ---- 画像つき横並び ---- */
+  .row { display: flex; gap: 24px; align-items: center; }
+  .row .irasuto { flex: none; width: 200px; margin: 0; }
+  .row .row-text { flex: 1; min-width: 0; }
+
+  /* ---- カードグリッド ---- */
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card-grid--2 { grid-template-columns: repeat(2, 1fr); }
+  .card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .card img { height: 90px; width: auto; max-width: 100%; object-fit: contain; }
+  .card h4 { color: var(--accent); font-size: 15px; }
+  .card p { font-size: 13px; color: var(--ink-soft); text-align: center; }
+
+  /* ---- ステップフロー ---- */
+  .step-flow { display: flex; align-items: center; }
+  .step { flex: 1; min-width: 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; }
+  .step img { height: 80px; width: auto; max-width: 100%; object-fit: contain; }
+  .step .step-no { background: var(--accent); color: #fff; border-radius: 999px; font-size: 12px; padding: 0 12px; }
+  .step h4 { font-size: 14px; }
+  .step p { font-size: 12px; color: var(--ink-soft); }
+  .step-arrow { flex: none; color: var(--accent); font-size: 20px; }
+
+  /* ---- 数値ハイライト ---- */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .stat { background: var(--accent-soft); border-radius: var(--radius); padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .stat img { height: 70px; width: auto; object-fit: contain; }
+  .stat .stat-value { font-size: 28px; font-weight: bold; color: var(--accent); }
+  .stat .stat-label { font-size: 13px; color: var(--ink-soft); }
+
+  /* ---- コールアウト ---- */
+  .callout {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--accent-soft);
+    border-left: 8px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+  }
+  .callout--warning { background: var(--warn-soft); border-left-color: var(--warn); }
+  .callout img { height: 64px; width: auto; flex: none; }
+
+  /* ---- 表 ---- */
+  .doc-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .doc-table th, .doc-table td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; }
+  .doc-table th { background: var(--accent-soft); }
+
+  /* ---- フッター ---- */
+  .doc-footer { text-align: center; color: var(--ink-soft); font-size: 12px; }
+
+  /* ---- 印刷（PDF 化） ---- */
+  @page { size: A4; margin: 14mm 12mm; }
+  @media print {
+    body { background: #fff; font-size: 13px; }
+    .page-wrap { max-width: none; padding: 0; gap: 0; display: block; }
+    .cover, .toc, .chapter { border: none; border-radius: 0; padding: 24px 8px; }
+    .cover { min-height: 240mm; justify-content: center; page-break-after: always; }
+    .toc { page-break-after: always; }
+    .chapter { page-break-before: always; }
+    .chapter:first-of-type { page-break-before: auto; }
+    .card, .step, .stat, .callout, .irasuto, .doc-table tr { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- 表紙 -->
+  <section class="cover">
+    <span class="doc-type">{{DOC_TYPE}}</span>
+    <h1>{{TITLE}}</h1>
+    <p class="subtitle">{{SUBTITLE}}</p>
+    {{HERO}}
+    <p class="cover-meta">{{VERSION}}　{{DATE}}　{{AUTHOR}}</p>
+  </section>
+
+  <!-- 目次 -->
+  <nav class="toc">
+    <h2>目次</h2>
+    <ol>
+{{TOC}}
+    </ol>
+  </nav>
+
+{{BODY}}
+
+  <footer class="doc-footer">{{META}} ／ イラスト: いらすとや（https://www.irasutoya.com）</footer>
+</div>
+</body>
+</html>
