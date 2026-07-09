@@ -1,0 +1,42 @@
+{
+  "name": "ai-ops",
+  "owner": {
+    "name": "rc-code-jp"
+  },
+  "metadata": {
+    "description": "rc-code-jp の Claude Code プラグイン集",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "agent-design-toolkit",
+      "source": "./claude-plugins/agent-design-toolkit",
+      "description": "Claude Code のスキル定義とサブエージェント定義を改善するためのプラグインです。"
+    },
+    {
+      "name": "html-doc-renderer",
+      "source": "./claude-plugins/html-doc-renderer",
+      "description": "仕様書・設計書・計画資料などのドキュメントを PDF 印刷にも最適化された読みやすい HTML として出力するスキルを提供するプラグインです。"
+    },
+    {
+      "name": "html-plan-renderer",
+      "source": "./claude-plugins/html-plan-renderer",
+      "description": "Claude Code の実行プランを読みやすい HTML として ./plans/ に出力するスキルを提供するプラグインです。"
+    },
+    {
+      "name": "irasutoya-docs",
+      "source": "./claude-plugins/irasutoya-docs",
+      "description": "いらすとやの画像で統一されたスライド・ドキュメントを HTML として出力するスキルを提供するプラグインです。"
+    },
+    {
+      "name": "planning-facilitator",
+      "source": "./claude-plugins/planning-facilitator",
+      "description": "計画・設計・実装着手の質を上げるためのスキル群を提供するプラグインです。"
+    },
+    {
+      "name": "script-agent-pipeline",
+      "source": "./claude-plugins/script-agent-pipeline",
+      "description": "Python スクリプトによる安定したデータ取得とサブエージェントの判断を組み合わせるパイプライン型スキルを提供するプラグインです。"
+    }
+  ]
+}
