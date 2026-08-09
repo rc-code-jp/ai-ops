@@ -1,0 +1,7 @@
+interface:
+  display_name: "Deliberate with Agents"
+  short_description: "複数エージェントの独立分析と反証を根拠付きで統合する"
+  default_prompt: "$deliberate-with-agents を使って、この変更案を反証付きで検討してください。"
+
+policy:
+  allow_implicit_invocation: false

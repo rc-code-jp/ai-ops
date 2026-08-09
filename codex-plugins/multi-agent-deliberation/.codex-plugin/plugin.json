@@ -1,0 +1,36 @@
+{
+  "name": "multi-agent-deliberation",
+  "version": "0.1.0",
+  "description": "複数のサブエージェントによる独立分析と反証を統合するプラグインです。",
+  "author": {
+    "name": "rc-code-jp",
+    "url": "https://github.com/rc-code-jp"
+  },
+  "homepage": "https://github.com/rc-code-jp/ai-ops/tree/main/codex-plugins/multi-agent-deliberation",
+  "repository": "https://github.com/rc-code-jp/ai-ops",
+  "license": "MIT",
+  "keywords": [
+    "multi-agent",
+    "deliberation",
+    "adversarial-review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Multi-Agent Deliberation",
+    "shortDescription": "独立分析と反証を統合して判断を支援する",
+    "longDescription": "2体のサブエージェントが独立して構成案と反証を作成し、1回の相互批評を経て親エージェントが根拠に基づく判断へ統合します。",
+    "developerName": "rc-code-jp",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "websiteURL": "https://github.com/rc-code-jp/ai-ops",
+    "defaultPrompt": [
+      "$deliberate-with-agents でこの変更案を反証付きで検討して",
+      "$deliberate-with-agents でこの調査結果の弱点を確認して",
+      "$deliberate-with-agents で変更可否を多角的に判断して"
+    ],
+    "brandColor": "#6D28D9"
+  }
+}
